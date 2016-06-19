@@ -1,0 +1,33 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "com.microsoft.azure-mobile-services": {
+            "PACKAGE_NAME": "com.rockitshop.cordovapushnotification"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.rockitshop.cordovapushnotification"
+        },
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "com.rockitshop.cordovapushnotification"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.rockitshop.cordovapushnotification"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.rockitshop.cordovapushnotification"
+        },
+        "org.wbt11a.Canvas2ImagePlugin": {
+            "PACKAGE_NAME": "com.rockitshop.cordovapushnotification"
+        },
+        "phonegap-plugin-push": {
+            "PACKAGE_NAME": "com.rockitshop.cordovapushnotification"
+        }
+    },
+    "dependent_plugins": {}
+}
