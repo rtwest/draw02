@@ -1,6 +1,12 @@
 W O R K I N G   R I G H T   N O W
 -----------------------------
-
+// iOS problems
+	- on Canvas, pen works but lighter alpha on brush doesn't
+	- Saving drawing doesn't work. This works on iOS7 and above.
+		- old one used is https://github.com/wbt11a/Canvas2ImagePlugin.git.  It crashes on iOS without this fix:
+			- //NSData* imageData = [NSData dataFromBase64String:[command.arguments objectAtIndex:0]];
+			- NSData *imageData = [[NSData alloc] initWithBase64EncodedString:[command.arguments objectAtIndex:0] options:0];
+			- also need to remove "Alog" reference
 - ** Need to return to your Image in Draw view and not alway make a new Canvas. 
 - ** Need to have seed picture templates to trace - simple characters - kitten, lion cub, pony, 
 - ** Parents can Draw and share with Kids 
@@ -47,6 +53,8 @@ P R O B L E M S
 
 // FAIL BUILD ON IOS
 - !! Commented out in Canvas2ImagePlugin.m for this line = Task "Error" skipped, due to false condition; ( '$(_InvalidConfigurationError)' == 'true' ) was evaluated as ( '' == 'true' ). 
+	- changed plugins for this and not having to remove that line now.
+
 - Have to go to iOS and build using XCode.  Worked targeting iOS 9 from XCode
 - Ignore error in not finding  Sqlite.tbd frame XCode frameworks
 

@@ -39,15 +39,6 @@
         "is_top_level": true,
         "variables": {}
     },
-    "org.wbt11a.Canvas2ImagePlugin": {
-        "source": {
-            "type": "git",
-            "url": "https://github.com/rtwest/Canvas2ImagePlugin.git",
-            "subdir": "."
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "phonegap-plugin-push": {
         "source": {
             "type": "git",
@@ -69,6 +60,23 @@
         "source": {
             "type": "registry",
             "id": "cordova-plugin-inappbrowser@~1.2.0"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-compat": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-compat"
+        },
+        "is_top_level": false,
+        "variables": {}
+    },
+    "org.wbt11a.Canvas2ImagePlugin": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/wbt11a/Canvas2ImagePlugin.git",
+            "subdir": "."
         },
         "is_top_level": true,
         "variables": {}

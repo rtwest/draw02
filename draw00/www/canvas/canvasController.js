@@ -275,7 +275,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
             ctx2.strokeStyle = color;
             ctx2.lineWidth = size;
             ctx2.fillStyle = color;
-            ctx2.globalAlpha = .5;
+            ctx2.globalAlpha = 0.5;
         };
 
         var startbrush = function (e) {
@@ -394,10 +394,15 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         ctx.fillRect(0, 0, w, h);
         ctx.globalCompositeOperation = 'source-over'; // reset this back to drawing
 
+        alert('calling save image plugin');
+
         // Using plugin to save to camera roll / photo gallery and return file path
         // ---
         window.canvas2ImagePlugin.saveImageDataToLibrary(
             function (filepath) {
+
+                alert(filepath);
+
                 console.log('image file path is: ' + filepath); //filepath is the filename path (for android and iOS)
 
                 // Save filepath to PouchDB for gallery
@@ -421,6 +426,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
             document.getElementById('canvas') // This names the element that is the Canvas.  Other params can follow here with commas...format, quality,etc... ",'.jpg', 80," 
        );   
         //$('#canvas').css('background-image', 'url()');// reset the CSS background 
+
     };
 
 

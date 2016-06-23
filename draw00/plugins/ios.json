@@ -22,10 +22,10 @@
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.rockitshop.cordovapushnotification"
         },
-        "org.wbt11a.Canvas2ImagePlugin": {
+        "phonegap-plugin-push": {
             "PACKAGE_NAME": "com.rockitshop.cordovapushnotification"
         },
-        "phonegap-plugin-push": {
+        "org.wbt11a.Canvas2ImagePlugin": {
             "PACKAGE_NAME": "com.rockitshop.cordovapushnotification"
         }
     },
