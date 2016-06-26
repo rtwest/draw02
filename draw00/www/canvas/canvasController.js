@@ -36,17 +36,17 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     $scope.toggleSelectArray = []; // array just for toggeling friend selection UI
     $scope.friendArray = globalService.friendArray;
 
-    // Test for touch device - NOT USED
-    // ---------------------
-    function isTouchDevice() {
-        return true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);
-    }
-    if (isTouchDevice() === true) {
-        //alert('Touch Device'); 
-        isTouch = 1;
-    } else {
-        //alert('Not a Touch Device');
-    }
+    //// Test for touch device - NOT USED
+    //// ---------------------
+    //function isTouchDevice() {
+    //    return true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);
+    //}
+    //if (isTouchDevice() === true) {
+    //    //alert('Touch Device'); 
+    //    isTouch = 1;
+    //} else {
+    //    //alert('Not a Touch Device');
+    //}
 
 
     // For choosing the drawing tools
@@ -100,14 +100,12 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
 
     $scope.chooseBrush1 = function () {
         resetdrawingtoolbar();
-        if ($('#canvas2').length) {
+        if ($('#canvas2').length) { // Part of resetting is removing the 2nd canvas
             $('#canvas2').remove();
         };
-        brushTouch(); // use for deploy to touch device
-
+        brushTouch(); // use for deploy to touch device.  This also adds the 2nd canvas
         $('#brushicon1').addClass('brush1select');
         size = 8;
-
         // use for web
         //if (isTouch == 1) {
         //    brushTouch();
@@ -163,15 +161,13 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         document.getElementById("content").style.height = window.innerHeight - 200;
         var canvas = '<canvas id="canvas" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas>';
         document.getElementById("content").innerHTML = canvas;
-
         // setup canvas
         ctx = document.getElementById("canvas").getContext("2d");
+        //ctx.globalAlpha = 0.5; // TESTING 
         ctx.lineCap = "round";
         ctx.lineJoin = 'round';
         ctx.strokeStyle = color;
-
         $scope.choosePen1();
-
     };
 
 
@@ -194,12 +190,11 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     // prototype to	start drawing on TOUCH using canvas moveTo and lineTo
     // ------------------------------------------
     var drawTouch = function () {
-
         var start = function (e) {
             x = e.originalEvent.changedTouches[0].pageX;
             y = e.originalEvent.changedTouches[0].pageY - 130; // 130 came from trial and error
             ctx.beginPath();
-            ctx.globalCompositeOperation = 'source-over'; // reset this back to drawing
+            //ctx.globalCompositeOperation = 'source-over'; // reset this back to drawing
             ctx.moveTo(x, y);
             ctx.arc(x, y, size / 2, 0, 2 * Math.PI, false);
             ctx.fillStyle = color;
@@ -208,7 +203,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         var move = function (e) {
             e.preventDefault();
             ctx.beginPath(); // after dot, start a new line
-            ctx.globalCompositeOperation = 'source-over'; // reset this back to drawing
+            //ctx.globalCompositeOperation = 'source-over'; // reset this back to drawing
             ctx.moveTo(x, y);
             x = e.originalEvent.changedTouches[0].pageX;
             y = e.originalEvent.changedTouches[0].pageY - 130;
@@ -217,7 +212,6 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
             ctx.strokeStyle = color;
             ctx.stroke();
         };
-
         $('#canvas').on('touchstart', start);
         $('#canvas').on('touchmove', move);
     };
@@ -259,6 +253,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     var brushTouch = function () {
         var canvas2
         var Canvas2Image = new Image();
+        var pointsarray = []; // Pencil Points
 
         //new canvas
         if (!($('#canvas2').length)) {
@@ -270,57 +265,78 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
             canvas2.style.left = 0;
             $('#content').append(canvas2);
             ctx2 = canvas2.getContext("2d");
+            ctx2.globalAlpha = 0.2; //  TESTING
             ctx2.lineCap = "round";
             ctx2.lineJoin = 'round';
             ctx2.strokeStyle = color;
             ctx2.lineWidth = size;
             ctx2.fillStyle = color;
-            ctx2.globalAlpha = 0.5;
         };
-
         var startbrush = function (e) {
-            $('#canvas2').css('opacity', '1');  //show the 2nd canvas
             x = e.originalEvent.changedTouches[0].pageX;
             y = e.originalEvent.changedTouches[0].pageY - 130; // 130 came from trial and error
             ctx2.beginPath();
-            ctx2.globalCompositeOperation = 'destination-atop';
             ctx2.moveTo(x, y);
             // make a dot on tap
             ctx2.arc(x, y, size / 1.9, 0, 2 * Math.PI, false);
             ctx2.fillStyle = color;
             ctx2.fill();
-            ctx2.beginPath(); // after dot, start a new line and reset properties
-            ctx2.globalCompositeOperation = 'destination-atop';
+            //ctx2.beginPath(); // after dot, start a new line and reset properties
         };
         var movebrush = function (e) {
+            //e.preventDefault();
+            //ctx2.moveTo(x, y);
+            //x = e.originalEvent.changedTouches[0].pageX;
+            //y = e.originalEvent.changedTouches[0].pageY - 130;
+            //ctx2.lineTo(x, y);
+            //ctx2.lineWidth = size;
+            //ctx2.closePath();
+            //ctx2.strokeStyle = color;
+            //ctx2.stroke();
+            // --------------------
             e.preventDefault();
-            ctx2.moveTo(x, y);
-            x = e.originalEvent.changedTouches[0].pageX;
-            y = e.originalEvent.changedTouches[0].pageY - 130;
-            ctx2.lineTo(x, y);
-            ctx2.lineWidth = size;
-            ctx2.closePath();
-            ctx2.strokeStyle = color;
-            ctx2.stroke();
+            var posx = e.originalEvent.changedTouches[0].pageX;
+            var posy = e.originalEvent.changedTouches[0].pageY - 130;
+            var pos = [posx, posy];
+            pointsarray.push(pos) // push coordinates array into the line array AT THEN END
+
+            ctx2.clearRect(0, 0, canvas2.width, canvas2.height); // Clear the Brush canvas 
+
+            // NOT LOOKING LIKE AN ARRAY OF ARRAYS, BUT 1 LONG ARRAY
+            alert(pointsarray);
+
+            //Iterate through PointsArray to draw line segments
+            for (var i = 0; i < pointsarray.length; ++i) {
+                var path = pointsarray[i];
+                if (path.length < 1)
+                    continue;
+                ctx2.lineWidth = size;
+                ctx2.closePath();
+                ctx2.strokeStyle = color;
+                ctx2.beginPath();
+                ctx2.moveTo(path[0].x, path[0].y);
+                for (var j = 1; j < path.length; ++j)
+                    ctx.lineTo(path[j].x, path[j].y);
+                ctx2.stroke();
+            };
+
         };
         var stopbrush = function (e) {
             e.preventDefault;
+            //ctx2.stroke(); // CAN'T DO STROKE AT END
             // draw canvas2 down on original canvas and remove canvas2
-            ctx.globalCompositeOperation = 'source-over'; // reset this back to drawing
-            
             Canvas2Image.onload = function () { // May take some time to load the src of the new image.  Just in case, do this:
-                ctx.drawImage(Canvas2Image, 0, 0);
+                ctx.drawImage(Canvas2Image, 0, 0); // Draw the Brush image down Main Canvas
             }
-            Canvas2Image.src = canvas2.toDataURL();
-
-            $('#canvas2').css('opacity', '0');  //hide the canvas after you copy it down so you don't see it duplicated
+            Canvas2Image.src = canvas2.toDataURL(); //convert brush canvas to image.
+            ctx2.clearRect(0, 0, canvas2.width, canvas2.height); // Clear the Brush canvas for the next line 
         };
-
         $('#canvas2').on('touchstart', startbrush);
         $('#canvas2').on('touchmove', movebrush);
         $('#canvas2').on('touchend', stopbrush);
 
     };
+
     // ------------------------------------------
 
 
