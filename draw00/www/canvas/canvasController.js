@@ -253,19 +253,19 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     var brushTouch = function () {
         var canvas2
         var Canvas2Image = new Image();
-        var pointsarray = []; // Pencil Points
 
         //new canvas
         if (!($('#canvas2').length)) {
             canvas2 = document.createElement('canvas');
             canvas2.id = 'canvas2';
+            canvas2.style.opacity = "0.5";
             canvas2.width = window.innerWidth;
             canvas2.height = window.innerHeight - 90;
             canvas2.style.position = "absolute";
             canvas2.style.left = 0;
             $('#content').append(canvas2);
             ctx2 = canvas2.getContext("2d");
-            ctx2.globalAlpha = 0.2; //  TESTING
+            //ctx2.globalAlpha = 0.2; //  TESTING
             ctx2.lineCap = "round";
             ctx2.lineJoin = 'round';
             ctx2.strokeStyle = color;
@@ -273,6 +273,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
             ctx2.fillStyle = color;
         };
         var startbrush = function (e) {
+            ctx2.globalAlpha = 1; // Because the canvas CSS is set to transparent, you don't need it here.  Make sure set to 1.0 before drawing.
             x = e.originalEvent.changedTouches[0].pageX;
             y = e.originalEvent.changedTouches[0].pageY - 130; // 130 came from trial and error
             ctx2.beginPath();
@@ -280,50 +281,22 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
             // make a dot on tap
             ctx2.arc(x, y, size / 1.9, 0, 2 * Math.PI, false);
             ctx2.fillStyle = color;
-            ctx2.fill();
-            //ctx2.beginPath(); // after dot, start a new line and reset properties
+            ctx2.fill(); 
         };
         var movebrush = function (e) {
-            //e.preventDefault();
-            //ctx2.moveTo(x, y);
-            //x = e.originalEvent.changedTouches[0].pageX;
-            //y = e.originalEvent.changedTouches[0].pageY - 130;
-            //ctx2.lineTo(x, y);
-            //ctx2.lineWidth = size;
-            //ctx2.closePath();
-            //ctx2.strokeStyle = color;
-            //ctx2.stroke();
-            // --------------------
             e.preventDefault();
-            var posx = e.originalEvent.changedTouches[0].pageX;
-            var posy = e.originalEvent.changedTouches[0].pageY - 130;
-            var pos = [posx, posy];
-            pointsarray.push(pos) // push coordinates array into the line array AT THEN END
-
-            ctx2.clearRect(0, 0, canvas2.width, canvas2.height); // Clear the Brush canvas 
-
-            // NOT LOOKING LIKE AN ARRAY OF ARRAYS, BUT 1 LONG ARRAY
-            alert(pointsarray);
-
-            //Iterate through PointsArray to draw line segments
-            for (var i = 0; i < pointsarray.length; ++i) {
-                var path = pointsarray[i];
-                if (path.length < 1)
-                    continue;
-                ctx2.lineWidth = size;
-                ctx2.closePath();
-                ctx2.strokeStyle = color;
-                ctx2.beginPath();
-                ctx2.moveTo(path[0].x, path[0].y);
-                for (var j = 1; j < path.length; ++j)
-                    ctx.lineTo(path[j].x, path[j].y);
-                ctx2.stroke();
-            };
-
+            ctx2.lineWidth = size;
+            ctx2.beginPath(); // need it here to draw new segments buts drops the dots in ~ AND have the TOUCH DOT and LINE different sizes.
+            ctx2.moveTo(x, y);
+            x = e.originalEvent.changedTouches[0].pageX;
+            y = e.originalEvent.changedTouches[0].pageY - 130;
+            ctx2.lineTo(x, y);
+            ctx2.closePath();
+            ctx2.stroke();
         };
         var stopbrush = function (e) {
             e.preventDefault;
-            //ctx2.stroke(); // CAN'T DO STROKE AT END
+            ctx2.globalAlpha = 0.2;  // change the tranparency before copying down
             // draw canvas2 down on original canvas and remove canvas2
             Canvas2Image.onload = function () { // May take some time to load the src of the new image.  Just in case, do this:
                 ctx.drawImage(Canvas2Image, 0, 0); // Draw the Brush image down Main Canvas
