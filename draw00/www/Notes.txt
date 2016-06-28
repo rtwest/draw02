@@ -1,15 +1,11 @@
 W O R K I N G   R I G H T   N O W
 -----------------------------
-// iOS problems
-	- on Canvas, pen works but lighter alpha on brush doesn't
-	- Saving drawing doesn't work. This works on iOS7 and above.
-		- old one used is https://github.com/wbt11a/Canvas2ImagePlugin.git.  It crashes on iOS without this fix:
-			- //NSData* imageData = [NSData dataFromBase64String:[command.arguments objectAtIndex:0]];
-			- NSData *imageData = [[NSData alloc] initWithBase64EncodedString:[command.arguments objectAtIndex:0] options:0];
-			- also need to remove "Alog" reference
+- ** Sharing event log not correct.  Say Kid1 shared with Kid1. ~ Not Kid1/You shared with You/Kid1.
+- didn't get notification on iOS but did on Android for shared picture
+
 - ** Need to return to your Image in Draw view and not alway make a new Canvas. 
-- ** Need to have seed picture templates to trace - simple characters - kitten, lion cub, pony, 
 - ** Parents can Draw and share with Kids 
+- ** Need to have seed picture templates to trace - simple characters - kitten, lion cub, pony, 
 
 
 - Collapsing repeat share event events, when looking at a client sharing to several people at once	- /// @@@@@@  HAVE TO BE SIGNED IN AS ADMIN TO TEST THIS OUT.
@@ -17,7 +13,6 @@ W O R K I N G   R I G H T   N O W
 - ClientPropertiesController on Admin site - has backwards event log when you reverse it at the end.  Is fine when reversed at starts looking at friend events.
 -- XXX Check that when Piper shared Image and Client liked it back, Client was put in there 2 times (name, avatar).  Is problem in HTML or JS Obj?
 -- XXX On Client image, Piper like is added multiple times to same Image == keeps being inserted into localstorage 
-- XX NEED TO TEST - didn't get a new picture share alert.  I think that was because of making serial calls where it should have been chained - so i'm trying that now.
 
 
 
@@ -29,10 +24,9 @@ W O R K I N G   R I G H T   N O W
 - * Loaders and Progress indicators when awaiting on Azure response
 - * Need better Picture Save Indicator.  Need better Picuture Shared indicator
 - Need to check for web connection on load and alert
-- Client side - Share Overlay design
 - Pull new friends from client to update client
 - ??? Need to restrict permissions on azure tables to authenticate users for admin and client(probably) 
-- ** Kid Design Like Nintendo 3DS - Class DoJo - sticker like white borders and box shadows
+- Kid Design Like Nintendo 3DS - Class DoJo - sticker like white borders and box shadows
 - Clients create Avatar - Random Avatar like HopScotch
  
 
@@ -52,9 +46,11 @@ P R O B L E M S
 //  - Security Content Policy with PouchDB.  Added -- <meta http-equiv="Content-Security-Policy" connect-src * blob: data:; ... ...> which seems to work.
 
 // FAIL BUILD ON IOS
-- !! Commented out in Canvas2ImagePlugin.m for this line = Task "Error" skipped, due to false condition; ( '$(_InvalidConfigurationError)' == 'true' ) was evaluated as ( '' == 'true' ). 
-	- changed plugins for this and not having to remove that line now.
-
+- Saving drawing doesn't work. This works on iOS7 and above.
+	- old one used is https://github.com/wbt11a/Canvas2ImagePlugin.git.  It crashes on iOS without this fix:
+	- //NSData* imageData = [NSData dataFromBase64String:[command.arguments objectAtIndex:0]];
+	- NSData *imageData = [[NSData alloc] initWithBase64EncodedString:[command.arguments objectAtIndex:0] options:0];
+	- also need to remove "Alog" reference
 - Have to go to iOS and build using XCode.  Worked targeting iOS 9 from XCode
 - Ignore error in not finding  Sqlite.tbd frame XCode frameworks
 
