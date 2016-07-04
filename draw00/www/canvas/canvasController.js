@@ -386,7 +386,9 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         window.canvas2ImagePlugin.saveImageDataToLibrary(
             function (filepath) {
 
-                alert(filepath);
+                console.log("function called ");alert("function called ");
+                
+                //alert(filepath);
 
                 console.log('image file path is: ' + filepath); //filepath is the filename path (for android and iOS)
 
@@ -404,7 +406,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
                 imagepropertiesarray.push(record);
                 localStorage["RYB_imagepropertiesarray"] = JSON.stringify(imagepropertiesarray); //push back to localStorage
                 // @@@@ NEED BETTER SAVED INDICATOR
-                alert("Saved")
+                alert("Saved");
 
             },
             function (err) {console.log(err);},

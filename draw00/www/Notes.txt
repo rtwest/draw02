@@ -1,8 +1,9 @@
 W O R K I N G   R I G H T   N O W
 -----------------------------
-- ** Sharing event log not correct.  Say Kid1 shared with Kid1. ~ Not Kid1/You shared with You/Kid1.
-- didn't get notification on iOS but did on Android for shared picture
 
+- ** SAVE IMAGE FAILS ON ANDROID TO WRITE TO IMAGE GALLERY
+
+- ** check that azure "filter" is "$filter"
 - ** Need to return to your Image in Draw view and not alway make a new Canvas. 
 - ** Parents can Draw and share with Kids 
 - ** Need to have seed picture templates to trace - simple characters - kitten, lion cub, pony, 
@@ -47,12 +48,20 @@ P R O B L E M S
 
 // FAIL BUILD ON IOS
 - Saving drawing doesn't work. This works on iOS7 and above.
-	- old one used is https://github.com/wbt11a/Canvas2ImagePlugin.git.  It crashes on iOS without this fix:
-	- //NSData* imageData = [NSData dataFromBase64String:[command.arguments objectAtIndex:0]];
-	- NSData *imageData = [[NSData alloc] initWithBase64EncodedString:[command.arguments objectAtIndex:0] options:0];
+- Solution uses https://github.com/wbt11a/Canvas2ImagePlugin.git with this fix:
+		- //NSData* imageData = [NSData dataFromBase64String:[command.arguments objectAtIndex:0]];
+		- NSData *imageData = [[NSData alloc] initWithBase64EncodedString:[command.arguments objectAtIndex:0] options:0];
 	- also need to remove "Alog" reference
-- Have to go to iOS and build using XCode.  Worked targeting iOS 9 from XCode
-- Ignore error in not finding  Sqlite.tbd frame XCode frameworks
+	- Have to go to iOS and build using XCode.  Worked targeting iOS 9 from XCode
+	- Ignore error in not finding  Sqlite.tbd frame XCode frameworks
+// FAIL ON ANDROID
+- Saving drawing not working
+	- In Android 6+ and API level 23+ there is a new in-time permissions model like iOS that Canvas2Image doesn't support.
+	- Fix is to add new permission model or target lower level API.
+
+
+
+
 
 
 S T O R A G E 

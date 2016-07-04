@@ -25,7 +25,8 @@
                || [[extension lowercaseString] isEqualToString:@"jpg"] || [[extension lowercaseString] isEqualToString:@"jpeg"]) {
         [UIImageJPEGRepresentation(image, quality) writeToFile:[directoryPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@", imageName, @"jpg"]] options:NSAtomicWrite error:nil];
     } else {
-        NSLog(@"Image Save Failed\nExtension: (%@) is not recognized, use (PNG/JPG)", extension);
+        //ALog(@"Image Save Failed\nExtension: (%@) is not recognized, use (PNG/JPG)", extension);
+        NSLog(@"Image Save Failed due to some file extension problem");
     }
 }
 
@@ -38,10 +39,9 @@
     NSString *dateString = [dateFormatter stringFromDate:date];
 
     self.latestCommand = command;
-
-	NSLog(@" trying NSData for imageData");
+    // dataFromBase64String is deprecated in Cordova
     //NSData* imageData = [NSData dataFromBase64String:[command.arguments objectAtIndex:0]];
-	NSData *imageData = [[NSData alloc] initWithBase64EncodedString:[command.arguments objectAtIndex:0] options:0];
+    NSData *imageData = [[NSData alloc] initWithBase64EncodedString:[command.arguments objectAtIndex:0] options:0];
     
     UIImage* image = [[[UIImage alloc] initWithData:imageData] autorelease];
 
@@ -72,15 +72,15 @@
     {
         // Show error message...
         NSLog(@"ERROR: %@",error);
-        CDVPluginResult* result = [CDVPluginResult resultWithStatus: CDVCommandStatus_ERROR messageAsString:error.description];
-        [self.commandDelegate sendPluginResult:result callbackId: self.latestCommand.callbackId];
+        //CDVPluginResult* result = [CDVPluginResult resultWithStatus: CDVCommandStatus_ERROR messageAsString:error.description];
+        //[self.commandDelegate sendPluginResult:result callbackId: self.latestCommand.callbackId];
     }
     else  // No errors
     {
         // Show message image successfully saved
         NSLog(@"IMAGE SAVED!");
-        CDVPluginResult* result = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK messageAsString:@"Image saved"];
-        [self.commandDelegate sendPluginResult:result callbackId:self.latestCommand.callbackId];
+        //CDVPluginResult* result = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK messageAsString:@"Image saved"];
+        //[self.commandDelegate sendPluginResult:result callbackId:self.latestCommand.callbackId];
     }
 }
 

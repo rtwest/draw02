@@ -107,14 +107,9 @@ public class Canvas2ImagePlugin extends CordovaPlugin {
 			 * 2.2
 			 */
 			if (check >= 1) {
-				if (picfolder == Environment.DIRECTORY_PICTURES){
-					folder = Environment
-	//					.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-						.getExternalStoragePublicDirectory(picfolder);
-				}
-				else{
-					folder = new File(picfolder);
-				}
+				folder = Environment
+//					.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+					.getExternalStoragePublicDirectory(picfolder);
 				if(!folder.exists()) {
 					folder.mkdirs();
 				}

@@ -72,10 +72,10 @@
         "is_top_level": false,
         "variables": {}
     },
-    "org.wbt11a.Canvas2ImagePlugin": {
+    "org.rtwest.Canvas2ImagePlugin": {
         "source": {
             "type": "git",
-            "url": "https://github.com/wbt11a/Canvas2ImagePlugin.git",
+            "url": "https://github.com/rtwest/Canvas2ImagePlugin.git",
             "subdir": "."
         },
         "is_top_level": true,

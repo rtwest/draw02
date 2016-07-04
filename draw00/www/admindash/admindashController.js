@@ -187,7 +187,9 @@ cordovaNG.controller('admindashController', function ($scope, globalService, Azu
                     kid1_id: kid1id,
                     kid2_id: kid2id,
                     kid1_name: kid1name,
-                    kid2_name: kid2name
+                    kid2_name: kid2name,
+                    kid1_avatar: kid1avatar,
+                    kid2_avatar: kid2avatar
                 })
                 .then(function () {
                     console.log('new friend insert successful');

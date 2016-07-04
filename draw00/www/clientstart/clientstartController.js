@@ -148,7 +148,7 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
 
 
 
-    var tempArray = [];
+    //var tempArray = [];
 
     // ==========================================
     //  Get local user name, guid, and avatar
@@ -179,7 +179,9 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
 
     function getFriendsArray() {
 
-        Azureservice.read('friends', "filter=kid1_id eq '" + clientGUID + "' or kid2_id eq '" + clientGUID + "'")
+        var tempFriendArray = [];
+
+        Azureservice.read('friends', "$filter=kid1_id eq '" + clientGUID + "' or kid2_id eq '" + clientGUID + "'")
             .then(function (items) {
                 if (items.length == 0) { // if no Friend record found, then
                     // 'noFriendsFlag' is a flag the UI uses to check for 'show/hide' msg div
@@ -189,8 +191,6 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
                 else { // if friend records found, add to friendsarray  // @@@@@@ MAYBE 'PUSH' INTO ARRAY FOR MULTIPLE CLIENTS TO AVOID LOTS OF AZURE CALLS
 
                     $scope.friendArray = []  // @@@ Make a brand New Array (( Dumping any existing one ))
-
-                    //alert(JSON.stringify(items));
 
                     // Go through Friend items and reorder it 
                     // --------------------------------------
@@ -206,7 +206,7 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
                                 //friend_parentname: ' ',
                                 //friend_parentemail: ' ',
                             };
-                            tempArray.push(element); // add back to array
+                            tempFriendArray.push(element); // add back to array
                         }
                         else { // else use the first kid
                             var element = {  // make a new array element
@@ -218,17 +218,17 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
                                 //friend_parentname: ' ',
                                 //friend_parentemail: ' ',
                             };
-                            tempArray.push(element); // add back to array
+                            tempFriendArray.push(element); // add back to array
                         };
                     };//end for
 
-                    globalService.friendArray = tempArray;
+                    globalService.friendArray = tempFriendArray;
                     $scope.friendArray = globalService.friendArray; // @@@ Set to $scope array
 
                     // XXXX REMOVED
                     //// Different way of setting up the loop 
                     //j = 0;
-                    //len = tempArray.length;
+                    //len = tempFriendArray.length;
                     ////alert(len);
                     //getkiddetails(); // @@@ Call recursive Azure call
 
@@ -238,41 +238,6 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
             });
 
     };//end function
-
-    // RECURSIVELY Go through Friend array and get addtional info Kid table in Azure 
-    // !!!!! LOTS OF CALL TO AZURE NOW  // !!!!! BETTER TO HAVE A CUSTOM API IN NODE TO DO THIS JOINING
-    // --------------------------------------
-    // @@@@@@@@@@@@@@ NOT USED
-    function getkiddetails() {
-        //alert(j); alert(len);
-
-        if (j < tempArray.length) { // Don't know why this is going over the array size but this is a hack to fix
-
-            Azureservice.getById('kid', tempArray[j].friend_id)
-            .then(function (item) {
-
-                // TRYING TO TAKE IT OUT OF THE OTHER AZURE CALL
-                // -----
-                tempArray[j].friend_avatar = item.avatar_id;
-                //tempArray[j].friend_parentname = item.parent_name;
-                //tempArray[j].friend_parentemail = item.parent_email;
-
-                globalService.friendArray = tempArray;
-                $scope.friendArray = globalService.friendArray; // @@@ Set to $scope array
-
-                // RECUSIVE PART.  Regular FOR loop didn't work.
-                // ------
-                j++;
-                if (j < len) {
-                    getkiddetails();
-                };
-
-            }, function (err) {
-                console.error('Azure Error: ' + err);
-            });
-        };
-    };
-
     // ==========================================
 
 
@@ -389,7 +354,8 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
                       if (event_type == 'friends') {
                           var element = {  // @@@ Make a new array object.  If items[i] is NULL, the HTML binding for ng-show will hide the HTML templating
                               //picture_url: items[i].picture_url,  // not relevant in this case
-                              fromkid: from_check,  // who shared it
+                              //fromkid: from_check,  // who shared it
+                              fromkid: items[i].fromkid_name,
                               fromkidavatar: items[i].fromkid_avatar,
                               fromkid_id: items[i].fromkid_id,
                               tokid: [{ // this is a notation for a nested object.  If someone sent to YOU, this has just your name in it
@@ -498,8 +464,8 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
                               fromkidavatar: items[i].fromkid_avatar,
                               fromkid_id: items[i].fromkid_id,
                               tokid: [{ // this is a notation for a nested object.  If someone sent to YOU, this has just your name in it
-                                  //tokidname: items[i].tokid_name,  // each kids shared with
-                                  tokidname: from_check,  // each kids shared with
+                                  tokidname: items[i].tokid_name,  // each kids shared with
+                                  //tokidname: from_check,  // each kids shared with
                                   tokid_id: items[i].tokid_id,
                                   tokidavatar: items[i].tokid_avatar,
                                   tokidreply: "",  // null right now
