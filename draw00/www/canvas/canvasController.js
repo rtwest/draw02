@@ -24,17 +24,18 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
 
     // Variables
     // -----------
-    var ctx, ctx2, color = "#000";
+    var ctx, ctx2, ctx0, color = "#000";
     var line_Width, size = 5;
     var tool = 'pen'
     var x, y, lastx, lasty = 0;
     var backgroundImage = new Image();
     var UniquePictureID = globalService.makeUniqueID(); // Makes a GUID for a Picture for PouchDB and for uploading to Azure Blob Storage
     var isTouch
-    $scope.shareActionSheet = false;  // boolean for ng-show for UI toggle
+    $scope.shareActionSheet = false; $scope.coloringbookActionSheet = false;  // boolean for ng-show for UI toggle
     $scope.shareSelectionArray = []; // array of friends to share with
     $scope.toggleSelectArray = []; // array just for toggeling friend selection UI
     $scope.friendArray = globalService.friendArray;
+    $scope.coloringbookArray =[]; // array for coloring book pages
 
     //// Test for touch device - NOT USED
     //// ---------------------
@@ -174,6 +175,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     resetdrawingtoolbar = function () {
         $('#canvas').off(); // reset event handler
         $('#canvas2').off();
+        $('#canvas0').off();
 
         $('#erasericon').removeClass('eraserselect');
         $('#penicon1').removeClass('pen1select');
@@ -211,8 +213,8 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
             ctx.strokeStyle = color;
             ctx.stroke();
         };
-        $('#canvas').on('touchstart', start);
-        $('#canvas').on('touchmove', move);
+        $('#canvas0').on('touchstart', start); // drawing is alwasy Canvas0 and written down to CanvasX context
+        $('#canvas0').on('touchmove', move);
     };
 
 
@@ -241,8 +243,8 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
             ctx.closePath();
             ctx.stroke();
         };
-        $('#canvas').on('touchstart', starteraser);
-        $('#canvas').on('touchmove', moveeraser);
+        $('#canvas0').on('touchstart', starteraser); // drawing is alwasy Canvas0 and written down to CanvasX context
+        $('#canvas0').on('touchmove', moveeraser);
 
     };
 
@@ -300,9 +302,9 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
             Canvas2Image.src = canvas2.toDataURL(); //convert brush canvas to image.
             ctx2.clearRect(0, 0, canvas2.width, canvas2.height); // Clear the Brush canvas for the next line 
         };
-        $('#canvas2').on('touchstart', startbrush);
-        $('#canvas2').on('touchmove', movebrush);
-        $('#canvas2').on('touchend', stopbrush);
+        $('#canvas0').on('touchstart', startbrush); // drawing is alwasy Canvas0 and written down to CanvasX context
+        $('#canvas0').on('touchmove', movebrush);
+        $('#canvas0').on('touchend', stopbrush);
 
     };
 
@@ -366,6 +368,8 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     $scope.saveTempImage = function () {
     };
 
+
+
     // Function to save the Canvas contents to an image on the file system
     // ------------------------------------------------------------------
     $scope.saveImage = function () {
@@ -379,16 +383,12 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         ctx.fillRect(0, 0, w, h);
         ctx.globalCompositeOperation = 'source-over'; // reset this back to drawing
 
-        alert('calling save image plugin');
-
         // Using plugin to save to camera roll / photo gallery and return file path
         // ---
         window.canvas2ImagePlugin.saveImageDataToLibrary(
             function (filepath) {
-
-                console.log("function called ");alert("function called ");
                 
-                //alert(filepath);
+                alert(filepath);
 
                 console.log('image file path is: ' + filepath); //filepath is the filename path (for android and iOS)
 
@@ -423,6 +423,9 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     // ==================================================================================================================================
     // ==================================================================================================================================
 
+    // -----------------------------------------------------------------------
+    // SHARING
+    // -----------------------------------------------------------------------
 
 
     // Function for toggling selection to share with
@@ -522,7 +525,9 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     // ==================================================================================================================================
     // ==================================================================================================================================
 
-
+    // -----------------------------------------------------------------------
+    // UPLOADING TO AZURE
+    // -----------------------------------------------------------------------
 
 
     // To upload file to Azure blob storage.  1. Call API to get a sasURL.  2. PUT the file using the sasURL 
@@ -631,8 +636,6 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
 
 
 
-
-
     // Function to nav to gallery view
     // ------------------------------------------------------------------
     $scope.goToGallery = function () {
@@ -642,18 +645,69 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
 
 
 
+    // ==================================================================================================================================
+    // ==================================================================================================================================
+    // ==================================================================================================================================
+   
+    // -----------------------------------------------------------------------
+    // Coloring book options
+    // -----------------------------------------------------------------------
+
+    $scope.coloringbookArray = [
+        "./images/kidstagramicons.svg",
+        "./images/kidstagramicons.svg",
+    ];
+
+    $scope.coloringbookImageClick = function (clickEvent) {
+        $scope.clickEvent = globalService.simpleKeys(clickEvent);
+        var imagepath = clickEvent.target.id; // DOM attribute
+
+        // Overlay this image on the canvas.  Remove a previous image first
+        
+        // if Canvas 0 exists, clear it.  If not, make it.
+        if (($('#canvas0').length)) {
+            var canvas0 = $('#canvas0');
+            ctx0 = document.getElementById("canvas0").getContext("2d");
+            ctx0.clearRect(0, 0, canvas0.width, canvas0.height); // Clear the canvas 
+            alert(canvas0.height);
+        }
+        else {
+            var canvas0;
+            canvas0 = document.createElement('canvas');
+            canvas0.id = 'canvas0';
+            canvas0.width = window.innerWidth;
+            canvas0.height = window.innerHeight - 90;
+            canvas0.style.position = "absolute";
+            canvas0.style.left = 0;
+            canvas0.style.zIndex = 1000;
+            $('#content').append(canvas0); // Adding canvas to DOM
+            ctx0 = canvas0.getContext("2d");
+        };
+
+        var coloringBookPage = new Image();
+        coloringBookPage.src = imagepath; //convert brush canvas to image.
+        coloringBookPage.onload = function () { // May take some time to load the src of the new image.  Just in case, do this:
+            ctx0.drawImage(coloringBookPage, 0, 0); // Draw image down on top Canvas
+        };
+
+        $scope.coloringbookActionSheet = false;
+    }; // end func
 
 
+
+    // ==================================================================================================================================
+    // ==================================================================================================================================
+    // ==================================================================================================================================
 
 
     // -----------------------------------------------------------------------
     // Ugly hack to create an HTML canvas when the HTML partial view is loaded
     // -----------------------------------------------------------------------
-    //define, resize, and insert canvas
+    //define, resize, and insert canvas wiping out anything under "content" in the DOM
         document.getElementById("content").style.height = window.innerHeight - 200;
-        var canvas = '<canvas id="canvas" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas>';
+        var canvas = '</canvas><canvas id="canvas" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas>';
         document.getElementById("content").innerHTML = canvas;
-    // setup canvas
+    // setup initial canvas
         ctx = document.getElementById("canvas").getContext("2d");
         ctx.lineCap = "round";
         ctx.lineJoin = 'round';

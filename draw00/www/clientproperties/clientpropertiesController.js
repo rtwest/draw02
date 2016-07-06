@@ -299,7 +299,7 @@ cordovaNG.controller('clientpropertiesController', function ($scope, globalServi
     var quickfriendarray = []; //this is for quickly looking up redundancies in friends list
     var tempArray = []; // This resets the local array (which $scope is set to later)       
 
-    Azureservice.read('friends', "filter=kid1_id eq '" + selectedclientguid + "' or kid2_id eq '" + selectedclientguid + "'")
+    Azureservice.read('friends', "$filter=kid1_id eq '" + selectedclientguid + "' or kid2_id eq '" + selectedclientguid + "'")
         .then(function (items) {
             if (items.length == 0) { // if no Friend record found, then
                 // 'noFriendsFlag' is a flag the UI uses to check for 'show/hide' msg div

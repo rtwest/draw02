@@ -9,7 +9,7 @@
         </div>-->
 
         <!--Comman Toolbar-->
-        <div class="palette-case" style="width:290px">
+        <div class="palette-case" style="width:390px">
             <button type="button" class="btn btn-default" style="box-shadow:none;" ng-click="newCanvas()">
                 <div class="svgicon new"></div>
             </button>
@@ -19,7 +19,12 @@
             <button type="button" class="btn btn-default" style="box-shadow:none;" ng-click="goToGallery()">
                 <div class="svgicon gallery"></div>
             </button>
-            <button type="button" class="btn btn-default" style="box-shadow:none;" ng-click="shareActionSheet=true">
+            <!--Sharing options and close out any coloring page selection --> 
+            <button type="button" class="btn btn-default" style="box-shadow:none;" ng-click="shareActionSheet=true;coloringbookActionSheet=false;">
+                <div class="svgicon share"></div>
+            </button>
+            <!--Select coloring page and close out any Share options --> 
+            <button type="button" class="btn btn-default" style="box-shadow:none;" ng-click="coloringbookActionSheet=true;shareActionSheet=false;shareSelectionArray=[];toggleSelectArray=[]">
                 <div class="svgicon share"></div>
             </button>
         </div>
@@ -55,7 +60,10 @@
      </div>   
 
     <!--HTML Canvas get inserted in here-->
-    <div id="content"></div>
+    <div id="content">
+        <canvas id="canvas0" style=""></canvas>
+
+    </div>
 
     <div class="navbar navbar-fixed-bottom" style="background-color:transparent; overflow-x:auto"> 
         <!--overflow and margin used to enable up coverup/hide scrollbar-->
@@ -105,5 +113,24 @@
         <!--use the class selectedShareClass IF this item's $index is in this array toggleSelectArray-->
         <div id="{{row.friend_id}},{{row.friend_name}},{{row.friend_avatar}}" ng-class="{'selectedShareClass':toggleSelectArray.indexOf($index) != -1}" ng-click="toggleSelect($event,$index)">{{row.friend_avatar}}</div>
         <div id="{{row.friend_id}},{{row.friend_name}},{{row.friend_avatar}}" ng-class="{'selectedShareClass':toggleSelectArray.indexOf($index) != -1}" ng-click="toggleSelect($event,$index)">{{row.friend_name}}</div>
+    </div>
+</script>
+
+
+<!--ColoringBook Templates-->
+<div ng-show="coloringbookActionSheet" style="position:absolute; top:60px;z-index:1000">
+    <div ng-click="coloringbookActionSheet=false;">Close</div>
+    <!--'For Each' loop using object 'clientlist' known to the $scope when defined in the controller -->
+    <!--'row' is a new local var created here then used in controllerJS-->
+    <!-- Can use 'arr.[x]' for array and 'ParamName/Colname' if JSON -->
+    <div ng-repeat="row in coloringbookArray track by $index" ng-include="'coloringbookRepeaterTemplate.html'"></div>
+</div>
+<!-- This is one way to specify the repeater item template used above
+    Could also be in separate HTML file loaded with ng-include="'folder/repeaterTemplate.html'"
+    Have to have the element ID on everything because the obj id is passed where ever you click-->
+<script type="text/ng-template" id="coloringbookRepeaterTemplate.html">
+    <div>
+        <img id="{{row}}" ng-click="coloringbookImageClick($event);coloringbookActionSheet=false;" src="{{row}}" alt="coloringbook" class="" style="height:100px;width:100px" />
+
     </div>
 </script>

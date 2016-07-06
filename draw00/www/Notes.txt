@@ -1,12 +1,19 @@
 W O R K I N G   R I G H T   N O W
 -----------------------------
 
-- ** SAVE IMAGE FAILS ON ANDROID TO WRITE TO IMAGE GALLERY
+- ** !!!! Need to return to your Image in Draw view and not alway make a new Canvas. 
 
-- ** check that azure "filter" is "$filter"
-- ** Need to return to your Image in Draw view and not alway make a new Canvas. 
+- ** Coloring Book - Trace Lines on top - Need to have seed picture templates to trace - simple characters - kitten, lion cub, pony, 
+	
+	- PROBLEM: something weird about the starting canvases, then make new canvases, the selecting pens. 
+		- it works if you add the coloring book, then pick a pen.  No pen picked when you start the coloring book for some reason.
+		- having the empty coloringbook canvas on at start didn't work for some reason.
+
+	- PROBLEM: when selected coloringbook image, the canvas isn't cleared but added ontop.  Not getting canvas.height/width properties.
+
+	- PROBLEM: Have to save it all down to on Save function
+
 - ** Parents can Draw and share with Kids 
-- ** Need to have seed picture templates to trace - simple characters - kitten, lion cub, pony, 
 
 
 - Collapsing repeat share event events, when looking at a client sharing to several people at once	- /// @@@@@@  HAVE TO BE SIGNED IN AS ADMIN TO TEST THIS OUT.
@@ -46,18 +53,19 @@ P R O B L E M S
 - The iteration on friends to go get details of each friend is still going over the count and errors.  Mitigated with an IF,THEN check
 //  - Security Content Policy with PouchDB.  Added -- <meta http-equiv="Content-Security-Policy" connect-src * blob: data:; ... ...> which seems to work.
 
+
+
 // FAIL BUILD ON IOS
-- Saving drawing doesn't work. This works on iOS7 and above.
-- Solution uses https://github.com/wbt11a/Canvas2ImagePlugin.git with this fix:
+	- This works on iOS7 and above.
+	- Solution uses https://github.com/wbt11a/Canvas2ImagePlugin.git with this fix:
 		- //NSData* imageData = [NSData dataFromBase64String:[command.arguments objectAtIndex:0]];
 		- NSData *imageData = [[NSData alloc] initWithBase64EncodedString:[command.arguments objectAtIndex:0] options:0];
 	- also need to remove "Alog" reference
 	- Have to go to iOS and build using XCode.  Worked targeting iOS 9 from XCode
 	- Ignore error in not finding  Sqlite.tbd frame XCode frameworks
-// FAIL ON ANDROID
-- Saving drawing not working
+// SAVING IMAGE FAIL ON ANDROID
 	- In Android 6+ and API level 23+ there is a new in-time permissions model like iOS that Canvas2Image doesn't support.
-	- Fix is to add new permission model or target lower level API.
+	- Fix is to add new permission model or target lower level API (22) in Config.xml.
 
 
 

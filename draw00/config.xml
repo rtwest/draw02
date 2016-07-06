@@ -124,4 +124,5 @@
   <preference name="BackupWebStorage" value="cloud" />
   <plugin name="cordova-plugin-inappbrowser" version="1.2.1" />
   <plugin name="org.rtwest.Canvas2ImagePlugin" version="0.7.1" src="https://github.com/rtwest/Canvas2ImagePlugin.git" />
+  <preference name="android-maxSdkVersion" value="22" />
 </widget>
