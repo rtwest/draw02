@@ -29,6 +29,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     var tool = 'pen'
     var x, y, lastx, lasty = 0;
     var backgroundImage = new Image();
+    var coloringBookPage = new Image();
     var UniquePictureID = globalService.makeUniqueID(); // Makes a GUID for a Picture for PouchDB and for uploading to Azure Blob Storage
     var isTouch
     $scope.shareActionSheet = false; $scope.coloringbookActionSheet = false;  // boolean for ng-show for UI toggle
@@ -158,15 +159,19 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     // Function to setup a new canvas for drawing. Called on button click.
     // ------------------------------------------
     $scope.newCanvas = function () {
-        //define, resize, and insert canvas
+        //define, resize, and insert canvas wiping out anything under "content" in the DOM
         document.getElementById("content").style.height = window.innerHeight - 200;
-        var canvas = '<canvas id="canvas" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas>';
+        var canvas = '<canvas id="canvas0" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '" style="position: absolute; left: 0px; z-index: 1000;"></canvas><canvas id="canvas" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas>';
         document.getElementById("content").innerHTML = canvas;
-        // setup canvas
+        // setup initial canvas
         ctx = document.getElementById("canvas").getContext("2d");
         ctx.lineCap = "round";
         ctx.lineJoin = 'round';
         ctx.strokeStyle = color;
+        $('.black').css("borderColor", "transparent"); //show black as selected color
+        // setup initial top level coloringbook 
+        ctx0 = document.getElementById("canvas0").getContext("2d");
+        coloringBookPage.src = "";
         $scope.choosePen1();
     };
 
@@ -375,6 +380,14 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     $scope.saveImage = function () {
         var w = window.innerWidth;
         var h = window.innerHeight - 90;
+
+        // if coloringBookPage is selected/has source, Write the coloringbook Canvas0 down on top of Canvas
+        // BUGGY. IT WORKS BUT IMAGE HAS NO SRC SO IS BLANK WHEN DRAWN DOWN.
+        //if (coloringBookPage.src.length > 1) {
+        //    alert('found src');
+            ctx.globalCompositeOperation = 'source-over'; // just to make sure
+            ctx.drawImage(coloringBookPage, 0, 0); // Draw image down on top Canvas
+        //};
 
         // IF no background image from camera, THEN fill background with white rectangle so it isn't transparent
         // @@@ ENVENTUALLY WILL ADD METHOD TO LOOK FOR BACKGROUND IMAGE AND COMBINE WITH CANVAS BEFORE SAVING @@@
@@ -666,10 +679,9 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         
         // if Canvas 0 exists, clear it.  If not, make it.
         if (($('#canvas0').length)) {
-            var canvas0 = $('#canvas0');
+            var canvas0 = document.getElementById("canvas0");
             ctx0 = document.getElementById("canvas0").getContext("2d");
             ctx0.clearRect(0, 0, canvas0.width, canvas0.height); // Clear the canvas 
-            alert(canvas0.height);
         }
         else {
             var canvas0;
@@ -684,7 +696,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
             ctx0 = canvas0.getContext("2d");
         };
 
-        var coloringBookPage = new Image();
+        //var coloringBookPage = new Image(); // moved to global var
         coloringBookPage.src = imagepath; //convert brush canvas to image.
         coloringBookPage.onload = function () { // May take some time to load the src of the new image.  Just in case, do this:
             ctx0.drawImage(coloringBookPage, 0, 0); // Draw image down on top Canvas
@@ -703,17 +715,26 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     // -----------------------------------------------------------------------
     // Ugly hack to create an HTML canvas when the HTML partial view is loaded
     // -----------------------------------------------------------------------
-    //define, resize, and insert canvas wiping out anything under "content" in the DOM
+
+    // if Canvas does not exists, make it.
+    if (!($('#canvas').length)) {
+
+        //alert('no canvas found');
+
+        //define, resize, and insert canvas wiping out anything under "content" in the DOM
         document.getElementById("content").style.height = window.innerHeight - 200;
-        var canvas = '</canvas><canvas id="canvas" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas>';
+        var canvas = '<canvas id="canvas0" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '" style="position: absolute; left: 0px; z-index: 1000;"></canvas><canvas id="canvas" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas>';
         document.getElementById("content").innerHTML = canvas;
-    // setup initial canvas
+        // setup initial canvas
         ctx = document.getElementById("canvas").getContext("2d");
         ctx.lineCap = "round";
         ctx.lineJoin = 'round';
         ctx.strokeStyle = color;
         $('.black').css("borderColor", "transparent"); //show black as selected color
-
+        // setup initial top level coloringbook 
+        ctx0 = document.getElementById("canvas0").getContext("2d");
+        coloringBookPage.src = "";
         $scope.choosePen1();
+    };
 
-    });
+    }); // end controller

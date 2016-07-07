@@ -1,17 +1,10 @@
 W O R K I N G   R I G H T   N O W
 -----------------------------
 
-- ** !!!! Need to return to your Image in Draw view and not alway make a new Canvas. 
+- ** PROBLEM: Need to return to your Image in Draw view and not alway make a new Canvas. 
 
-- ** Coloring Book - Trace Lines on top - Need to have seed picture templates to trace - simple characters - kitten, lion cub, pony, 
-	
-	- PROBLEM: something weird about the starting canvases, then make new canvases, the selecting pens. 
-		- it works if you add the coloring book, then pick a pen.  No pen picked when you start the coloring book for some reason.
-		- having the empty coloringbook canvas on at start didn't work for some reason.
-
-	- PROBLEM: when selected coloringbook image, the canvas isn't cleared but added ontop.  Not getting canvas.height/width properties.
-
-	- PROBLEM: Have to save it all down to on Save function
+- ** Coloring Book 
+	- PROBLEM: using brush makes a grey background when viewing in Gallery
 
 - ** Parents can Draw and share with Kids 
 
