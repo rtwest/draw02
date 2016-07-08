@@ -2,12 +2,14 @@ W O R K I N G   R I G H T   N O W
 -----------------------------
 
 - ** PROBLEM: Need to return to your Image in Draw view and not alway make a new Canvas. 
+	- doesn't account for ColoringBook overlay
 
-- ** Coloring Book 
-	- PROBLEM: using brush makes a grey background when viewing in Gallery
+- Back Button on Gallery doesn't work after you viewed an GalleryImage
+
+- ** PROBLEM: using brush makes a grey background when viewing in Gallery
 
 - ** Parents can Draw and share with Kids 
-
+- ** PROBLEM: GalleryView - weird thing when Canceling Share, then Deleting picture - this deletes the previous picture not one selected.
 
 - Collapsing repeat share event events, when looking at a client sharing to several people at once	- /// @@@@@@  HAVE TO BE SIGNED IN AS ADMIN TO TEST THIS OUT.
 - On Invitation Accept, Insert into Event Record  /// @@@@@@  HAVE TO BE SIGNED IN AS ADMIN TO TEST THIS OUT.  Alternatively, do this from Admin side after invitation accept

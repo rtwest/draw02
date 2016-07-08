@@ -329,7 +329,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     // ------------------------------------------------------------------
     $scope.getPicture = function () {
 
-    // Take picture using device camera and retrieve image as base64-encoded string
+        // Take picture using device camera and retrieve image as base64-encoded string
         navigator.camera.getPicture(onPhotoDataSuccess, onPhotoDataFail, {
             quality: 75, // reduced size to avoid memory  0-100
             destinationType: Camera.DestinationType.FILE_URI,
@@ -368,9 +368,27 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     // ==================================================================================================================================
     // ==================================================================================================================================
 
+    // -----------------------------------------------------------------------
+    // SAVING
+    // -----------------------------------------------------------------------
+
     // Function to save the Canvas contents to an image in LocalStore - Not permanently in the file system - so you don't lose image when navigating around
     // ------------------------------------------------------------------
     $scope.saveTempImage = function () {
+
+        // Need to make canvas images and store base canvas and coloringbook overlay
+        // You can store an image in local storage by converting image data to Base64 string
+
+        var canvasInProgress = document.getElementById('canvas');
+        var DrawingInProgressDataURL = canvasInProgress.toDataURL("image/png");
+        var DrawingInProgressBase64 = DrawingInProgressDataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+        localStorage.setItem("DrawingInProgress", DrawingInProgressBase64);
+
+        //// Need to check for this on pageload
+        //var DrawingInProgressBase64 = localStorage.getItem('DrawingInProgress');
+        //bannerImg = document.getElementById('tableBanner');
+        //bannerImg.src = "data:image/png;base64," + DrawingInProgressBase64;
+
     };
 
 
@@ -385,8 +403,8 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         // BUGGY. IT WORKS BUT IMAGE HAS NO SRC SO IS BLANK WHEN DRAWN DOWN.
         //if (coloringBookPage.src.length > 1) {
         //    alert('found src');
-            ctx.globalCompositeOperation = 'source-over'; // just to make sure
-            ctx.drawImage(coloringBookPage, 0, 0); // Draw image down on top Canvas
+        ctx.globalCompositeOperation = 'source-over'; // just to make sure
+        ctx.drawImage(coloringBookPage, 0, 0); // Draw image down on top Canvas
         //};
 
         // IF no background image from camera, THEN fill background with white rectangle so it isn't transparent
@@ -652,6 +670,11 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     // Function to nav to gallery view
     // ------------------------------------------------------------------
     $scope.goToGallery = function () {
+
+
+        $scope.saveTempImage(); // Save a DrawingInProgress to LocalStorage
+
+
         globalService.lastView = '/canvas';  // for knowing where to go with the back button
         globalService.changeView('/gallery');
     };
@@ -716,10 +739,33 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     // Ugly hack to create an HTML canvas when the HTML partial view is loaded
     // -----------------------------------------------------------------------
 
-    // if Canvas does not exists, make it.
-    if (!($('#canvas').length)) {
+    // if there is a temp drawing, use it.  Check localstorage
+    if (localStorage.getItem('DrawingInProgress')) {
+        
+        //define, resize, and insert canvas wiping out anything under "content" in the DOM
+        document.getElementById("content").style.height = window.innerHeight - 200;
+        var canvas = '<canvas id="canvas0" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '" style="position: absolute; left: 0px; z-index: 1000;"></canvas><canvas id="canvas" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas>';
+        document.getElementById("content").innerHTML = canvas;
+        // setup initial canvas
+        ctx = document.getElementById("canvas").getContext("2d");
+        ctx.lineCap = "round";
+        ctx.lineJoin = 'round';
+        ctx.strokeStyle = color;
+        $('.black').css("borderColor", "transparent"); //show black as selected color
 
-        //alert('no canvas found');
+        // Draw down the DrawingInProgress
+        var DrawingInProgressBase64 = localStorage.getItem('DrawingInProgress');
+        var DrawingInProgress = new Image();
+        DrawingInProgress.src = "data:image/png;base64," + DrawingInProgressBase64;
+        ctx.drawImage(DrawingInProgress, 0, 0); // Draw image down on top Canvas
+
+        // setup initial top level coloringbook 
+        ctx0 = document.getElementById("canvas0").getContext("2d");
+        coloringBookPage.src = "";
+        $scope.choosePen1();
+
+    }
+    else{ // if not, make new
 
         //define, resize, and insert canvas wiping out anything under "content" in the DOM
         document.getElementById("content").style.height = window.innerHeight - 200;

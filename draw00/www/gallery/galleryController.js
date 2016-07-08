@@ -31,6 +31,7 @@ cordovaNG.controller('galleryController', function ($scope, globalService, Azure
 
         //alert($scope.image_ID_Src);  
         globalService.pictureViewParams = $scope.image_ID_Src; // put in global var to pass to the next view.  Should have Image ID and Image filepath data
+        globalService.lastView = '/gallery';
         globalService.changeView('/gallerypicture'); // Go to gallerypicture view
     };
 

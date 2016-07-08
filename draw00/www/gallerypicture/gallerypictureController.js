@@ -290,17 +290,6 @@ cordovaNG.controller('gallerypictureController', function ($scope, $http, global
 
 
 
-
-
-
-
-
-
-
-
-
-
-
     // View changer.  Have to use $scope. to make available to the view
     // --------------
     $scope.goBack = function () {
