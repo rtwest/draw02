@@ -376,18 +376,19 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     // ------------------------------------------------------------------
     $scope.saveTempImage = function () {
 
-        // Need to make canvas images and store base canvas and coloringbook overlay
-        // You can store an image in local storage by converting image data to Base64 string
-
         var canvasInProgress = document.getElementById('canvas');
         var DrawingInProgressDataURL = canvasInProgress.toDataURL("image/png");
         var DrawingInProgressBase64 = DrawingInProgressDataURL.replace(/^data:image\/(png|jpg);base64,/, "");
         localStorage.setItem("DrawingInProgress", DrawingInProgressBase64);
 
-        //// Need to check for this on pageload
-        //var DrawingInProgressBase64 = localStorage.getItem('DrawingInProgress');
-        //bannerImg = document.getElementById('tableBanner');
-        //bannerImg.src = "data:image/png;base64," + DrawingInProgressBase64;
+        //alert(localStorage.getItem("DrawingInProgress"));
+
+        var canvasInProgressOverlay = document.getElementById('canvas0');
+        var DrawingInProgressOverlayDataURL = canvasInProgressOverlay.toDataURL("image/png");
+        var DrawingInProgressOverlayBase64 = DrawingInProgressOverlayDataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+        localStorage.setItem("DrawingInProgressOverlay", DrawingInProgressOverlayBase64);
+
+        //alert(localStorage.getItem("DrawingInProgressOverlay"));
 
     };
 
@@ -419,7 +420,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         window.canvas2ImagePlugin.saveImageDataToLibrary(
             function (filepath) {
                 
-                alert(filepath);
+                //alert(filepath);
 
                 console.log('image file path is: ' + filepath); //filepath is the filename path (for android and iOS)
 
@@ -670,14 +671,17 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     // Function to nav to gallery view
     // ------------------------------------------------------------------
     $scope.goToGallery = function () {
-
-
-        $scope.saveTempImage(); // Save a DrawingInProgress to LocalStorage
-
-
         globalService.lastView = '/canvas';  // for knowing where to go with the back button
         globalService.changeView('/gallery');
     };
+
+
+    // Catching navigation away from this View to save drawing to localstorage
+    // -----------------------------------------------------------------------
+    $scope.$on("$routeChangeStart", function (event, next, current) {
+        $scope.saveTempImage();
+    });
+
 
 
 
@@ -690,7 +694,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     // -----------------------------------------------------------------------
 
     $scope.coloringbookArray = [
-        "./images/kidstagramicons.svg",
+        "./images/Lion.svg",
         "./images/kidstagramicons.svg",
     ];
 
@@ -742,12 +746,17 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     // if there is a temp drawing, use it.  Check localstorage
     if (localStorage.getItem('DrawingInProgress')) {
         
+        //alert(localStorage.getItem('DrawingInProgress'));
+        //alert(localStorage.getItem('DrawingInProgressOverlay'));
+
         //define, resize, and insert canvas wiping out anything under "content" in the DOM
         document.getElementById("content").style.height = window.innerHeight - 200;
         var canvas = '<canvas id="canvas0" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '" style="position: absolute; left: 0px; z-index: 1000;"></canvas><canvas id="canvas" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas>';
         document.getElementById("content").innerHTML = canvas;
-        // setup initial canvas
+
+        // setup initial canvases
         ctx = document.getElementById("canvas").getContext("2d");
+        ctx0 = document.getElementById("canvas0").getContext("2d");
         ctx.lineCap = "round";
         ctx.lineJoin = 'round';
         ctx.strokeStyle = color;
@@ -757,11 +766,20 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         var DrawingInProgressBase64 = localStorage.getItem('DrawingInProgress');
         var DrawingInProgress = new Image();
         DrawingInProgress.src = "data:image/png;base64," + DrawingInProgressBase64;
-        ctx.drawImage(DrawingInProgress, 0, 0); // Draw image down on top Canvas
+        DrawingInProgress.onload = function () { // May take some time to load the src of the new image.  Just in case, do this:
+            ctx.drawImage(DrawingInProgress, 0, 0); // Draw image down on top Canvas
+        };
+        //ctx.drawImage(DrawingInProgress, 0, 0); // Draw image down on top Canvas
 
         // setup initial top level coloringbook 
-        ctx0 = document.getElementById("canvas0").getContext("2d");
-        coloringBookPage.src = "";
+        var coloringBookPageSource = localStorage.getItem('DrawingInProgressOverlay');
+        var coloringBookPageOverlay = new Image();
+        coloringBookPageOverlay.src = "data:image/png;base64," + coloringBookPageSource;
+        coloringBookPageOverlay.onload = function () { // May take some time to load the src of the new image.  Just in case, do this:
+            ctx0.drawImage(coloringBookPageOverlay, 0, 0); // Draw image down on top Canvas
+        };
+        //ctx0.drawImage(coloringBookPageOverlay, 0, 0); // Draw image down on top Canvas
+
         $scope.choosePen1();
 
     }
@@ -782,5 +800,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         coloringBookPage.src = "";
         $scope.choosePen1();
     };
+
+
 
     }); // end controller

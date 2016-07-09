@@ -293,7 +293,7 @@ cordovaNG.controller('gallerypictureController', function ($scope, $http, global
     // View changer.  Have to use $scope. to make available to the view
     // --------------
     $scope.goBack = function () {
-        globalService.changeView(globalService.lastView);  // Back location using the captured previous view's name
+        globalService.changeView('/gallery');  // Back location using the captured previous view's name
     };
 
 

@@ -512,6 +512,7 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
     // --------------
     $scope.gotoCanvasView = function () {
         globalService.changeView('/canvas');
+        globalService.lastView = '/clientstart';
     };
     $scope.gotoGalleryView = function () {
         globalService.lastView = '/clientstart';  // for knowing where to go with the back button

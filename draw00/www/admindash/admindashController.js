@@ -499,6 +499,11 @@ cordovaNG.controller('admindashController', function ($scope, globalService, Azu
     $scope.gotoInvitationView = function () {
         globalService.changeView('/invitationlist');
     };
+    $scope.gotoCanvasView = function () {
+        globalService.changeView('/canvas');
+        globalService.lastView = '/admindash';
+    };
+
     
 
 
