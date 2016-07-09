@@ -171,6 +171,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         $('.black').css("borderColor", "transparent"); //show black as selected color
         // setup initial top level coloringbook 
         ctx0 = document.getElementById("canvas0").getContext("2d");
+        ctx0.imageSmoothingEnabled = false; // Important for a clear image
         coloringBookPage.src = "";
         $scope.choosePen1();
     };
@@ -694,8 +695,14 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     // -----------------------------------------------------------------------
 
     $scope.coloringbookArray = [
-        "./images/Lion.svg",
-        "./images/kidstagramicons.svg",
+        "./images/lion.svg",
+        "./images/unicorn.svg",
+        "./images/catface.svg",
+        //"./images/unicorn.svg",
+        //"./images/unicorn.svg",
+        //"./images/unicorn.svg",
+        //"./images/unicorn.svg",
+        //"./images/unicorn.svg",
     ];
 
     $scope.coloringbookImageClick = function (clickEvent) {
@@ -724,9 +731,10 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         };
 
         //var coloringBookPage = new Image(); // moved to global var
+        ctx0.imageSmoothingEnabled = false;
         coloringBookPage.src = imagepath; //convert brush canvas to image.
         coloringBookPage.onload = function () { // May take some time to load the src of the new image.  Just in case, do this:
-            ctx0.drawImage(coloringBookPage, 0, 0); // Draw image down on top Canvas
+            ctx0.drawImage(coloringBookPage, 0, 0, window.innerWidth, window.innerHeight - 90); // Draw image down on top Canvas AT FULL CANVAS SIZE
         };
 
         $scope.coloringbookActionSheet = false;
@@ -757,6 +765,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         // setup initial canvases
         ctx = document.getElementById("canvas").getContext("2d");
         ctx0 = document.getElementById("canvas0").getContext("2d");
+        ctx0.imageSmoothingEnabled = false; // Important for a clear image
         ctx.lineCap = "round";
         ctx.lineJoin = 'round';
         ctx.strokeStyle = color;
@@ -797,6 +806,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         $('.black').css("borderColor", "transparent"); //show black as selected color
         // setup initial top level coloringbook 
         ctx0 = document.getElementById("canvas0").getContext("2d");
+        ctx0.imageSmoothingEnabled = false; // Important for a clear image
         coloringBookPage.src = "";
         $scope.choosePen1();
     };

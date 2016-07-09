@@ -2,6 +2,7 @@ W O R K I N G   R I G H T   N O W
 -----------------------------
 
 - Adding ColoringBooks
+	- !!!~!  Need to size the coloring book image to view port
 
 - ** PROBLEM: Parent has no friends to share with
 	- no results in FriendShareList
