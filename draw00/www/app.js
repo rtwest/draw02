@@ -278,94 +278,94 @@ cordovaNG.service('globalService', ['$location', function ($location) {
 // ==================================================
 
 
-// ===============   NOT USED   =====================
-cordovaNG.controller('mainController', function ($scope, Azureservice) {
+// ===============   NOT USED // KEPT FOR REFERENCE   =====================
+//cordovaNG.controller('mainController', function ($scope, Azureservice) {
 
-    // Scope is like the partial view datamodel.  'message' is defined in the paritial view
-    $scope.message = 'Welcome ' + localStorage.user + ', Angular working';
+//    // Scope is like the partial view datamodel.  'message' is defined in the paritial view
+//    $scope.message = 'Welcome ' + localStorage.user + ', Angular working';
 
-    $scope.loginstatus = Azureservice.isLoggedIn();
+//    $scope.loginstatus = Azureservice.isLoggedIn();
 
 
-    // Had to wrap this Azure Mobile Client call into a function so it wasn't automatically called on view load for some reason
-    // -------------------------------
-    $scope.azurelogin = function () {
+//    // Had to wrap this Azure Mobile Client call into a function so it wasn't automatically called on view load for some reason
+//    // -------------------------------
+//    $scope.azurelogin = function () {
         
-        // Call the login method in the Azure mobile wrapper for Google
-        Azureservice.login('google')
-        .then(function () { // when done, do this
-            $scope.loginstatus = 'Login successful';
+//        // Call the login method in the Azure mobile wrapper for Google
+//        Azureservice.login('google')
+//        .then(function () { // when done, do this
+//            $scope.loginstatus = 'Login successful';
 
-            // ###################################################
-            // ---------------------------------------------------
-            // Example of using a custom API on the Azure Mobile Service called 'servie-POC' that 
-            // has 'user' preview function enabled using VS CLI
-            Azureservice.invokeApi('userauthenticationproperties') // name of the Custom API
-            .then(function (response) { // on success, return this JSON result
-                if (response.google) { // if the response obj has a 'google' parameter, it's from Google 
-                    // --------
-                    // JSON digging specific to the Google Auth returned properties
-                    // ---------
-                    // using html5 browser storage.  May have to convert from response string to js obj (JSON.parse(string)), 
-                    //    but not in the simple case below
-                    localStorage.user = response.google.name;
-                    $scope.message = 'Welcome ' + localStorage.user;
+//            // ###################################################
+//            // ---------------------------------------------------
+//            // Example of using a custom API on the Azure Mobile Service called 'servie-POC' that 
+//            // has 'user' preview function enabled using VS CLI
+//            Azureservice.invokeApi('userauthenticationproperties') // name of the Custom API
+//            .then(function (response) { // on success, return this JSON result
+//                if (response.google) { // if the response obj has a 'google' parameter, it's from Google 
+//                    // --------
+//                    // JSON digging specific to the Google Auth returned properties
+//                    // ---------
+//                    // using html5 browser storage.  May have to convert from response string to js obj (JSON.parse(string)), 
+//                    //    but not in the simple case below
+//                    localStorage.user = response.google.name;
+//                    $scope.message = 'Welcome ' + localStorage.user;
 
-                };
-            },
-            function (err) {
-                console.error('Azure Custom API Error: ' + err);
-                document.getElementById('log').innerHTML += 'Azure Custom API Error: ' + err +' - ' + JSON.stringify(response) +'</br>'// old school dom injection
+//                };
+//            },
+//            function (err) {
+//                console.error('Azure Custom API Error: ' + err);
+//                document.getElementById('log').innerHTML += 'Azure Custom API Error: ' + err +' - ' + JSON.stringify(response) +'</br>'// old school dom injection
 
-            })
-            // ###################################################
+//            })
+//            // ###################################################
 
-            // @@@@@@ using injected service 'global service' defined function to load another view
-            //globalService.changeView('managedusers');
+//            // @@@@@@ using injected service 'global service' defined function to load another view
+//            //globalService.changeView('managedusers');
 
-        },
-        function (err) {
-            $scope.loginstatus = 'Azure Error: ' + err;
-            document.getElementById('log').innerHTML += 'login function error: ' + err + '</br>'// old school dom injection
-        });
-    };
+//        },
+//        function (err) {
+//            $scope.loginstatus = 'Azure Error: ' + err;
+//            document.getElementById('log').innerHTML += 'login function error: ' + err + '</br>'// old school dom injection
+//        });
+//    };
 
-    // Creating var in the $scope view model and will bind to this in the HTML partial with 'ng-model=<$scope.var>'
-    // ---------------------------------------------------
-    $scope.managedUsername = '';
+//    // Creating var in the $scope view model and will bind to this in the HTML partial with 'ng-model=<$scope.var>'
+//    // ---------------------------------------------------
+//    $scope.managedUsername = '';
 
-    // load data from online for the managed user with this name (SHOULD BE MORE SECURE)
-    // --------------------------------------
-    $scope.loadFromCloud = function () {
+//    // load data from online for the managed user with this name (SHOULD BE MORE SECURE)
+//    // --------------------------------------
+//    $scope.loadFromCloud = function () {
 
-        document.getElementById('log').innerHTML += 'Called load from Azure</br>'// old school dom injection
+//        document.getElementById('log').innerHTML += 'Called load from Azure</br>'// old school dom injection
 
-        // Query the Azure table using the Azure service wrapper
-        // ---------------------------------------------------
-        Azureservice.query('todotable', {
-            criteria: { mobileid: '63E726A5-A3B7-49F7-B976-52E382800C8D' }, // Where statement - Guid put on global $rootScope var
-            columns: ['id', 'todoitemtitle', 'todoitemstatus'] // Only return these columns
-        })
-            .then(function (todolistforuser) {
-                document.getElementById('log').innerHTML += 'got data</br>'// old school dom injection
-                $scope.todolistforuser = todolistforuser;   // Assign the results to a $scope variable 
-            }, function (err) {
-                document.getElementById('log').innerHTML += 'could not get data</br>'// old school dom injection;
-            }
-        );
-    };
-    // Ng-repeat used to list DOM elements with DB table rowid loaded into elementID so its captured on the target.id
-    // Need this to retreive GUID in Div ID property for record CRUD
-    // ------------------------------------------
-    //$scope.todoitemclick = function (clickEvent) {
-    //    $scope.clickEvent = globalService.simpleKeys(clickEvent);
-    //    $scope.toDoItemId = clickEvent.target.id;
-    //    document.getElementById('log').innerHTML += 'selected item '+$scope.toDoItemId+'</br>'// old school dom injection;
+//        // Query the Azure table using the Azure service wrapper
+//        // ---------------------------------------------------
+//        Azureservice.query('todotable', {
+//            criteria: { mobileid: '63E726A5-A3B7-49F7-B976-52E382800C8D' }, // Where statement - Guid put on global $rootScope var
+//            columns: ['id', 'todoitemtitle', 'todoitemstatus'] // Only return these columns
+//        })
+//            .then(function (todolistforuser) {
+//                document.getElementById('log').innerHTML += 'got data</br>'// old school dom injection
+//                $scope.todolistforuser = todolistforuser;   // Assign the results to a $scope variable 
+//            }, function (err) {
+//                document.getElementById('log').innerHTML += 'could not get data</br>'// old school dom injection;
+//            }
+//        );
+//    };
+//    // Ng-repeat used to list DOM elements with DB table rowid loaded into elementID so its captured on the target.id
+//    // Need this to retreive GUID in Div ID property for record CRUD
+//    // ------------------------------------------
+//    //$scope.todoitemclick = function (clickEvent) {
+//    //    $scope.clickEvent = globalService.simpleKeys(clickEvent);
+//    //    $scope.toDoItemId = clickEvent.target.id;
+//    //    document.getElementById('log').innerHTML += 'selected item '+$scope.toDoItemId+'</br>'// old school dom injection;
 
-    //};
+//    //};
 
 
-});
+//});
 // ==================================================
 
 

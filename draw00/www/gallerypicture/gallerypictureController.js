@@ -5,6 +5,8 @@ cordovaNG.controller('gallerypictureController', function ($scope, $http, global
     // Scope is like the view datamodel.  'message' is defined in the paritial view html {{message}}
     //$scope.message = "Nothing here yet";  //- TEST ONLY
 
+    // Variables
+    // -------------------
     $scope.clientavatar = globalService.userarray[3];
     $scope.clientname = globalService.userarray[4];
 
@@ -13,11 +15,25 @@ cordovaNG.controller('gallerypictureController', function ($scope, $http, global
     $scope.shareActionSheet = false;  // boolean for ng-show for UI toggle
     $scope.shareSelectionArray = []; // array of friends to share with
     $scope.toggleSelectArray = []; // array just for toggeling friend selection UI
-    $scope.friendArray = globalService.friendArray; // for sharing with friends
+    //$scope.friendArray = globalService.friendArray; // for sharing with friends
+
+    // if User if Clients, friends are friend. 
+    if (globalService.userarray[1] == 'client') {
+        $scope.friendArray = globalService.friendArray;
+    }
+    else { //Else, User is Admin and friends are clients
+        if (localStorage.getItem('RYB_clientarray')) {
+            $scope.friendArray = JSON.parse(localStorage.getItem('RYB_clientarray')); // get array from localstorage key pair and string
+        }
+    };
 
     var picturesplitarray = globalService.pictureViewParams.split(","); // Global var passed to the view. The div ID had 2 values shoved in. Split string into array by ","
     $scope.pictureID = picturesplitarray[0];
     $scope.pictureFilePath = picturesplitarray[1];
+    // -------------------
+
+
+
 
     //Get Comments on this picture by looking up picture details in the local storage array
     // ---

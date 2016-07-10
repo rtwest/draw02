@@ -35,8 +35,34 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     $scope.shareActionSheet = false; $scope.coloringbookActionSheet = false;  // boolean for ng-show for UI toggle
     $scope.shareSelectionArray = []; // array of friends to share with
     $scope.toggleSelectArray = []; // array just for toggeling friend selection UI
-    $scope.friendArray = globalService.friendArray;
     $scope.coloringbookArray =[]; // array for coloring book pages
+
+    // if User if Clients, friends are friend. 
+    if (globalService.userarray[1] == 'client') {
+        $scope.friendArray = globalService.friendArray; // this was set up on ClientStartController
+    }
+    else { //Else, User is Admin and friends are clients
+        if (localStorage.getItem('RYB_clientarray')) {
+            // need to reformat this data because client friends and admin clients are JSON and Array formats.  HTML side need consistency.
+            //var tempclientarr = [];
+            var tempclientarr = JSON.parse(localStorage.getItem('RYB_clientarray')); // get array from localstorage key pair and string
+            var tempclientarrlen = tempclientarr.length;
+            var tempfriendarr = [];
+            for (i = 0; i < tempclientarrlen; i++) {
+                var element = {  // make a new array element
+                    friend_id: tempclientarr[i][0],
+                    friend_name: tempclientarr[i][1],
+                    friend_avatar: tempclientarr[i][3],
+                };
+                alert(element);
+                tempfriendarr.push(element); // add back to array
+            };
+            $scope.friendArray = tempfriendarr;
+         };
+    };
+    // -----------
+
+
 
     //// Test for touch device - NOT USED
     //// ---------------------
@@ -403,15 +429,13 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
 
         // if coloringBookPage is selected/has source, Write the coloringbook Canvas0 down on top of Canvas
         // BUGGY. IT WORKS BUT IMAGE HAS NO SRC SO IS BLANK WHEN DRAWN DOWN.
-        //if (coloringBookPage.src.length > 1) {
-        //    alert('found src');
         ctx.globalCompositeOperation = 'source-over'; // just to make sure
         ctx.drawImage(coloringBookPage, 0, 0); // Draw image down on top Canvas
-        //};
 
         // IF no background image from camera, THEN fill background with white rectangle so it isn't transparent
         // @@@ ENVENTUALLY WILL ADD METHOD TO LOOK FOR BACKGROUND IMAGE AND COMBINE WITH CANVAS BEFORE SAVING @@@
         ctx.globalCompositeOperation = 'destination-over'; // draw behind current drawing
+        ctx.globalAlpha = 1; // Because the brush canvas CSS is set to 50% transparent, make sure set to 1.0 before drawing.
         ctx.fillStyle = "#FFFFFF";
         ctx.fillRect(0, 0, w, h);
         ctx.globalCompositeOperation = 'source-over'; // reset this back to drawing
@@ -730,11 +754,16 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
             ctx0 = canvas0.getContext("2d");
         };
 
-        //var coloringBookPage = new Image(); // moved to global var
-        ctx0.imageSmoothingEnabled = false;
-        coloringBookPage.src = imagepath; //convert brush canvas to image.
+        ctx0.imageSmoothingEnabled = false; // Important to get a drawing without pixeled edges       
+
+        coloringBookPage.src = imagepath;
+        alert(ctx0.canvas.height);
+        alert(coloringBookPage.height);
+
+
         coloringBookPage.onload = function () { // May take some time to load the src of the new image.  Just in case, do this:
-            ctx0.drawImage(coloringBookPage, 0, 0, window.innerWidth, window.innerHeight - 90); // Draw image down on top Canvas AT FULL CANVAS SIZE
+            //ctx0.drawImage(coloringBookPage, 0, 0, window.innerWidth, window.innerHeight - 90); // Draw image down on top Canvas AT FULL CANVAS SIZE
+            ctx0.drawImage(coloringBookPage, 0, 0, ctx0.canvas.width, ctx.canvas.height);
         };
 
         $scope.coloringbookActionSheet = false;
@@ -778,7 +807,6 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         DrawingInProgress.onload = function () { // May take some time to load the src of the new image.  Just in case, do this:
             ctx.drawImage(DrawingInProgress, 0, 0); // Draw image down on top Canvas
         };
-        //ctx.drawImage(DrawingInProgress, 0, 0); // Draw image down on top Canvas
 
         // setup initial top level coloringbook 
         var coloringBookPageSource = localStorage.getItem('DrawingInProgressOverlay');
@@ -787,7 +815,6 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         coloringBookPageOverlay.onload = function () { // May take some time to load the src of the new image.  Just in case, do this:
             ctx0.drawImage(coloringBookPageOverlay, 0, 0); // Draw image down on top Canvas
         };
-        //ctx0.drawImage(coloringBookPageOverlay, 0, 0); // Draw image down on top Canvas
 
         $scope.choosePen1();
 

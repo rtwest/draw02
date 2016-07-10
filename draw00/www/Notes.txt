@@ -2,15 +2,18 @@ W O R K I N G   R I G H T   N O W
 -----------------------------
 
 - Adding ColoringBooks
-	- !!!~!  Need to size the coloring book image to view port
+	- In iOS, Need to size the coloring book image to view port.  Knows canvas dimensions (-90 looks right).  Knows Src image dimension.
 
 - ** PROBLEM: Parent has no friends to share with
-	- no results in FriendShareList
+	- Need to test out
+	- Need to copy over to Gallery too.
+	- 
 
 - ** PROBLEM: Gallery: on iOS
 	- Gallery not loaded on iOS.  You can save image and view in gallery, but when app loaded the Gallery images aren't found.
 
-- PROBLEM: using brush makes a grey background when viewing in Gallery
+- PROBLEM: using brush makes a grey background when viewing in Gallery.
+	- with no background, color is black.  I added code to make it white, but I think it's getting 50% opacity somewhere.
 
 
 
