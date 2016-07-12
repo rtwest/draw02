@@ -128,7 +128,8 @@
     Have to have the element ID on everything because the obj id is passed where ever you click-->
 <script type="text/ng-template" id="coloringbookRepeaterTemplate.html">
     <div>
-        <img id="{{row}}" ng-click="coloringbookImageClick($event);coloringbookActionSheet=false;" src="{{row}}" alt="coloringbook" class="" style="height:100px;width:100px" />
+        <!--<img id="{{row}}" ng-click="coloringbookImageClick($event);coloringbookActionSheet=false;" src="{{row}}" alt="coloringbook" width="{{canvaswidth}}" height="{{canvasheight}}" />-->
+        <img id="{{row}}" ng-click="coloringbookImageClick($event);coloringbookActionSheet=false;" src="{{row}}" alt="coloringbook" />
 
     </div>
 </script>

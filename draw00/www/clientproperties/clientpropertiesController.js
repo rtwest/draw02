@@ -33,21 +33,6 @@ cordovaNG.controller('clientpropertiesController', function ($scope, globalServi
     // =======================================================
 
 
-    // Click on picture image for full picture view in modal (LATER FEATURE)
-
-
-    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-    // HOW TO AVOID UNCESSARY REPEAT AZURE CALL?  
-    // --- Need persistent store.  Need LastTimeChecked var
-    // --- set a scope var for last check time > 30min?
-    // --- have a localStorage array for lastClientChecks?
-    // --- use sessionStorage just for this session?
-    // --- @@@@@ test how long a scope var is good for?
-    // DIFFERENT CLIENTS TOO?
-    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-
-
     // Set the local data model here to the data in the global service between views
     // -------
     //$scope.eventarray = globalService.eventArray;
@@ -58,8 +43,6 @@ cordovaNG.controller('clientpropertiesController', function ($scope, globalServi
     //    getEventLog();
     //    globalService.lastTimeChecked = Date.now();
     //};
-
-
 
 
     // ==========================================
@@ -243,8 +226,8 @@ cordovaNG.controller('clientpropertiesController', function ($scope, globalServi
                                       fromkidavatar: items[i].fromkid_avatar,
                                       fromkid_id: items[i].fromkid_id,
                                       tokid: [{ // this is a notation for a nested object.  If someone sent to YOU, this has just your name in it
-                                          //tokidname: items[i].tokid_name,  // each kids shared with
-                                          tokidname: from_check,  // each kids shared with
+                                          tokidname: items[i].tokid_name,  // each kids shared with
+                                          //tokidname: from_check,  // each kids shared with
                                           tokid_id: items[i].tokid_id,
                                           tokidavatar: items[i].tokid_avatar,
                                           tokidreply: "",  // null right now

@@ -1,20 +1,14 @@
 W O R K I N G   R I G H T   N O W
 -----------------------------
 
-- Adding ColoringBooks
-	- In iOS, Need to size the coloring book image to view port.  Knows canvas dimensions (-90 looks right).  Knows Src image dimension.
-
-- ** PROBLEM: Parent has no friends to share with
-	- Need to test out
-	- Need to copy over to Gallery too.
-	- 
+- ** PROBLEM: iOS ColoringBookPage Image Size
+	- on iOS, seems to keep the image size from the preview.  Solution can be to have 2 different size images for Menu and Overlay.  Works on Android too.
+	- when Saving to gallery, Canvas0 drawn down werid. Postitioning different from overlay. Sometimes off screen even (Canvas controller).
+		- same on iOS and Android.  The temp save image is fine though.
 
 - ** PROBLEM: Gallery: on iOS
 	- Gallery not loaded on iOS.  You can save image and view in gallery, but when app loaded the Gallery images aren't found.
-
-- PROBLEM: using brush makes a grey background when viewing in Gallery.
-	- with no background, color is black.  I added code to make it white, but I think it's getting 50% opacity somewhere.
-
+	- Parent can't share from Gallery, but works from Draw.
 
 
 - Collapsing repeat share event events, when looking at a client sharing to several people at once	- /// @@@@@@  HAVE TO BE SIGNED IN AS ADMIN TO TEST THIS OUT.

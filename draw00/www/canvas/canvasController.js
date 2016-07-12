@@ -52,9 +52,8 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
                 var element = {  // make a new array element
                     friend_id: tempclientarr[i][0],
                     friend_name: tempclientarr[i][1],
-                    friend_avatar: tempclientarr[i][3],
+                    friend_avatar: tempclientarr[i][2],
                 };
-                alert(element);
                 tempfriendarr.push(element); // add back to array
             };
             $scope.friendArray = tempfriendarr;
@@ -542,7 +541,10 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         var tokid_id = friendsplitarray[0];
         var tokid_name = friendsplitarray[1];
         var tokid_avatar = friendsplitarray[2];   
-        alert(tokid_name + " - " + tokid_id + " - " + tokid_avatar);
+        var fromavatar;
+        if (globalService.userarray[1] == 'admin') {fromavatar = globalService.userarray[5];}
+        else {fromavatar = globalService.userarray[3];};
+        //alert(tokid_name + " - " + tokid_id + " - " + tokid_avatar);
 
         Azureservice.insert('events', {
             //id: globalService.makeUniqueID(), // i don't need to track this so let Azure handle it
@@ -552,7 +554,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
             event_type: "sharepicture", // 
             tokid_id: tokid_id,
             tokid_name: tokid_name,
-            fromkid_avatar: globalService.userarray[3],
+            fromkid_avatar: fromavatar, // because the Admin and Client local storage user array are different, you have detect user type and pick avatar differently
             tokid_avatar: tokid_avatar,
             //comment_content: 'this is a comment here',
             datetime: Date.now(),
@@ -719,17 +721,18 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     // -----------------------------------------------------------------------
 
     $scope.coloringbookArray = [
-        "./images/lion.svg",
-        "./images/unicorn.svg",
-        "./images/catface.svg",
+        //"./images/lion.svg",
         //"./images/unicorn.svg",
-        //"./images/unicorn.svg",
+        "./images/catface-small.svg",
+        //"./images/tigerface.svg",
+        //"./images/giraffe.svg",
         //"./images/unicorn.svg",
         //"./images/unicorn.svg",
         //"./images/unicorn.svg",
     ];
 
     $scope.coloringbookImageClick = function (clickEvent) {
+
         $scope.clickEvent = globalService.simpleKeys(clickEvent);
         var imagepath = clickEvent.target.id; // DOM attribute
 
@@ -756,14 +759,11 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
 
         ctx0.imageSmoothingEnabled = false; // Important to get a drawing without pixeled edges       
 
+        imagepath = imagepath.replace("-small","");
         coloringBookPage.src = imagepath;
-        alert(ctx0.canvas.height);
-        alert(coloringBookPage.height);
-
-
         coloringBookPage.onload = function () { // May take some time to load the src of the new image.  Just in case, do this:
             //ctx0.drawImage(coloringBookPage, 0, 0, window.innerWidth, window.innerHeight - 90); // Draw image down on top Canvas AT FULL CANVAS SIZE
-            ctx0.drawImage(coloringBookPage, 0, 0, ctx0.canvas.width, ctx.canvas.height);
+            ctx0.drawImage(coloringBookPage, 0, 0, ctx0.canvas.width, ctx0.canvas.height);
         };
 
         $scope.coloringbookActionSheet = false;
@@ -795,6 +795,8 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         ctx = document.getElementById("canvas").getContext("2d");
         ctx0 = document.getElementById("canvas0").getContext("2d");
         ctx0.imageSmoothingEnabled = false; // Important for a clear image
+        $scope.canvaswidth = ctx0.canvas.width;
+        $scope.canvasheight = ctx0.canvas.height;
         ctx.lineCap = "round";
         ctx.lineJoin = 'round';
         ctx.strokeStyle = color;
@@ -834,6 +836,8 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         // setup initial top level coloringbook 
         ctx0 = document.getElementById("canvas0").getContext("2d");
         ctx0.imageSmoothingEnabled = false; // Important for a clear image
+        $scope.canvaswidth = ctx0.canvas.width;
+        $scope.canvasheight = ctx0.canvas.height;
         coloringBookPage.src = "";
         $scope.choosePen1();
     };

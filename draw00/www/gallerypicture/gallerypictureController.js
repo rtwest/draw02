@@ -15,16 +15,29 @@ cordovaNG.controller('gallerypictureController', function ($scope, $http, global
     $scope.shareActionSheet = false;  // boolean for ng-show for UI toggle
     $scope.shareSelectionArray = []; // array of friends to share with
     $scope.toggleSelectArray = []; // array just for toggeling friend selection UI
-    //$scope.friendArray = globalService.friendArray; // for sharing with friends
 
     // if User if Clients, friends are friend. 
     if (globalService.userarray[1] == 'client') {
-        $scope.friendArray = globalService.friendArray;
+        $scope.friendArray = globalService.friendArray; // this was set up on ClientStartController
     }
     else { //Else, User is Admin and friends are clients
         if (localStorage.getItem('RYB_clientarray')) {
-            $scope.friendArray = JSON.parse(localStorage.getItem('RYB_clientarray')); // get array from localstorage key pair and string
-        }
+            // need to reformat this data because client friends and admin clients are JSON and Array formats.  HTML side need consistency.
+            //var tempclientarr = [];
+            var tempclientarr = JSON.parse(localStorage.getItem('RYB_clientarray')); // get array from localstorage key pair and string
+            var tempclientarrlen = tempclientarr.length;
+            var tempfriendarr = [];
+            for (i = 0; i < tempclientarrlen; i++) {
+                var element = {  // make a new array element
+                    friend_id: tempclientarr[i][0],
+                    friend_name: tempclientarr[i][1],
+                    friend_avatar: tempclientarr[i][2],
+                };
+                alert(element);
+                tempfriendarr.push(element); // add back to array
+            };
+            $scope.friendArray = tempfriendarr;
+         };
     };
 
     var picturesplitarray = globalService.pictureViewParams.split(","); // Global var passed to the view. The div ID had 2 values shoved in. Split string into array by ","
@@ -146,8 +159,12 @@ cordovaNG.controller('gallerypictureController', function ($scope, $http, global
         var friendsplitarray = friend.split(","); // Split the string into an array by ","
         var tokid_id = friendsplitarray[0];
         var tokid_name = friendsplitarray[1];
-        var tokid_avatar = friendsplitarray[2];   
-        alert(tokid_name + " - " + tokid_id + " - " + tokid_avatar);
+        var tokid_avatar = friendsplitarray[2];
+        var fromavatar;
+        if (globalService.userarray[1] == 'admin') { fromavatar = globalService.userarray[5]; }
+        else { fromavatar = globalService.userarray[3]; };
+
+        //alert(tokid_name + " - " + tokid_id + " - " + tokid_avatar);
 
         Azureservice.insert('events', {
             //id: globalService.makeUniqueID(), // i don't need to track this so let Azure handle it
@@ -157,7 +174,7 @@ cordovaNG.controller('gallerypictureController', function ($scope, $http, global
             event_type: "sharepicture", // 
             tokid_id: tokid_id,
             tokid_name: tokid_name,
-            fromkid_avatar: globalService.userarray[3],
+            fromkid_avatar: fromavatar, // because the Admin and Client local storage user array are different, you have detect user type and pick avatar differently
             tokid_avatar: tokid_avatar,
             //comment_content: 'this is a comment here',
             datetime: Date.now(),
