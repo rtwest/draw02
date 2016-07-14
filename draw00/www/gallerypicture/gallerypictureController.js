@@ -230,6 +230,7 @@ cordovaNG.controller('gallerypictureController', function ($scope, $http, global
         // Get the data-URL formatted image
         var blob = dataURItoBlob(canvas.toDataURL("image/png", 1.0));// Convert the Base64 encoded image to just the blob
 
+        alert(blob);
 
         // -------------------
         // Using a callback function passed as a para is supposed to work on StackOverflow

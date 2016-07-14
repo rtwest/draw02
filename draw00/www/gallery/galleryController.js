@@ -5,7 +5,8 @@ cordovaNG.controller('galleryController', function ($scope, globalService, Azure
     // Scope is like the view datamodel.  'gallerymessage' is defined in the paritial view
     //$scope.gallerymessage = "Nothing here yet";  //- TEST ONLY
 
-    $scope.kidavatar = globalService.userarray[3];
+    if (globalService.userarray[1] == 'admin') {$scope.kidavatar = globalService.userarray[5];}
+    else { $scope.kidavatar = globalService.userarray[3];};
     $scope.kidname = globalService.userarray[4];
 
     // Get local storage for saved images filepath.  @@@@@@@ NEED TO ACCOUNT FOR WHEN AN IMAGE IS REMOVED FROM PHONE GALLERY (TRY/CATCH)

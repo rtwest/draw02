@@ -190,6 +190,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         document.getElementById("content").innerHTML = canvas;
         // setup initial canvas
         ctx = document.getElementById("canvas").getContext("2d");
+        ctx.imageSmoothingEnabled = false; // Important to get a drawing without pixeled edges       
         ctx.lineCap = "round";
         ctx.lineJoin = 'round';
         ctx.strokeStyle = color;
@@ -401,21 +402,15 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     // Function to save the Canvas contents to an image in LocalStore - Not permanently in the file system - so you don't lose image when navigating around
     // ------------------------------------------------------------------
     $scope.saveTempImage = function () {
-
         var canvasInProgress = document.getElementById('canvas');
         var DrawingInProgressDataURL = canvasInProgress.toDataURL("image/png");
         var DrawingInProgressBase64 = DrawingInProgressDataURL.replace(/^data:image\/(png|jpg);base64,/, "");
         localStorage.setItem("DrawingInProgress", DrawingInProgressBase64);
 
-        //alert(localStorage.getItem("DrawingInProgress"));
-
         var canvasInProgressOverlay = document.getElementById('canvas0');
         var DrawingInProgressOverlayDataURL = canvasInProgressOverlay.toDataURL("image/png");
         var DrawingInProgressOverlayBase64 = DrawingInProgressOverlayDataURL.replace(/^data:image\/(png|jpg);base64,/, "");
         localStorage.setItem("DrawingInProgressOverlay", DrawingInProgressOverlayBase64);
-
-        //alert(localStorage.getItem("DrawingInProgressOverlay"));
-
     };
 
 
@@ -429,10 +424,10 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         // if coloringBookPage is selected/has source, Write the coloringbook Canvas0 down on top of Canvas
         // BUGGY. IT WORKS BUT IMAGE HAS NO SRC SO IS BLANK WHEN DRAWN DOWN.
         ctx.globalCompositeOperation = 'source-over'; // just to make sure
-        ctx.drawImage(coloringBookPage, 0, 0); // Draw image down on top Canvas
+        //ctx.drawImage(coloringBookPage, 0, 0); // Draw image down on top Canvas
+        drawImageScaled(coloringBookPage, ctx);
 
         // IF no background image from camera, THEN fill background with white rectangle so it isn't transparent
-        // @@@ ENVENTUALLY WILL ADD METHOD TO LOOK FOR BACKGROUND IMAGE AND COMBINE WITH CANVAS BEFORE SAVING @@@
         ctx.globalCompositeOperation = 'destination-over'; // draw behind current drawing
         ctx.globalAlpha = 1; // Because the brush canvas CSS is set to 50% transparent, make sure set to 1.0 before drawing.
         ctx.fillStyle = "#FFFFFF";
@@ -721,11 +716,11 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     // -----------------------------------------------------------------------
 
     $scope.coloringbookArray = [
-        //"./images/lion.svg",
-        //"./images/unicorn.svg",
+        "./images/lion-small.svg",
+        "./images/unicorn-small.svg",
         "./images/catface-small.svg",
-        //"./images/tigerface.svg",
-        //"./images/giraffe.svg",
+        "./images/tigerface-small.svg",
+        "./images/giraffe-small.svg",
         //"./images/unicorn.svg",
         //"./images/unicorn.svg",
         //"./images/unicorn.svg",
@@ -757,19 +752,32 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
             ctx0 = canvas0.getContext("2d");
         };
 
-        ctx0.imageSmoothingEnabled = false; // Important to get a drawing without pixeled edges       
-
-        imagepath = imagepath.replace("-small","");
+        imagepath = imagepath.replace("-small",""); // from the thumbnail, get the full image path
         coloringBookPage.src = imagepath;
         coloringBookPage.onload = function () { // May take some time to load the src of the new image.  Just in case, do this:
-            //ctx0.drawImage(coloringBookPage, 0, 0, window.innerWidth, window.innerHeight - 90); // Draw image down on top Canvas AT FULL CANVAS SIZE
-            ctx0.drawImage(coloringBookPage, 0, 0, ctx0.canvas.width, ctx0.canvas.height);
+            drawImageScaled(coloringBookPage);
+            //if (device.platform === 'iOS') {drawImageScaled(coloringBookPage, ctx0);}
+            //else {
+            //    alert('android');
+            //    ctx0.drawImage(coloringBookPage, 0, 0);
+            //};
         };
 
         $scope.coloringbookActionSheet = false;
     }; // end func
 
-
+    //  Function to scale and center the coloring book overlay in the canvas
+    function drawImageScaled(drawimg) {
+        var drawcanvas = document.getElementById("canvas0");
+        drawctx = drawcanvas.getContext("2d")
+        drawctx.imageSmoothingEnabled = false; // Important to get a drawing without pixeled edges       
+        var hRatio = drawcanvas.width / drawimg.width;
+        var vRatio = drawcanvas.height / drawimg.height;
+        var ratio  = Math.min ( hRatio, vRatio );
+        var centerShift_x = (drawcanvas.width - drawimg.width * ratio) / 2;
+        var centerShift_y = (drawcanvas.height - drawimg.height * ratio) / 2;
+        drawctx.drawImage(drawimg, 0, 0, drawimg.width, drawimg.height, centerShift_x, centerShift_y, drawimg.width * ratio, drawimg.height * ratio);
+    }
 
     // ==================================================================================================================================
     // ==================================================================================================================================
@@ -815,7 +823,8 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         var coloringBookPageOverlay = new Image();
         coloringBookPageOverlay.src = "data:image/png;base64," + coloringBookPageSource;
         coloringBookPageOverlay.onload = function () { // May take some time to load the src of the new image.  Just in case, do this:
-            ctx0.drawImage(coloringBookPageOverlay, 0, 0); // Draw image down on top Canvas
+            //ctx0.drawImage(coloringBookPageOverlay, 0, 0); // Draw image down on top Canvas
+            drawImageScaled(coloringBookPageOverlay, ctx0);
         };
 
         $scope.choosePen1();
