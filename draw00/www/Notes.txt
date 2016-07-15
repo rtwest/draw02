@@ -2,7 +2,8 @@ W O R K I N G   R I G H T   N O W
 -----------------------------
 
 - ** PROBLEM: ColringBookPage not drawn down on Andriod
-	- iOS ColoringBookPage Image Size - Fixed
+	- Need to test back on iOS
+	- For Android, need to crop images with some fair spacing.  more vertical the horizontal.  iOS will adjust and center.  Android wont.
 
 - ** PROBLEM: Gallery: on iOS
 	- Gallery not loaded on iOS.  You can save image and view in gallery, but when app loaded the Gallery images aren't found.

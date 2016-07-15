@@ -752,15 +752,10 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
             ctx0 = canvas0.getContext("2d");
         };
 
-        imagepath = imagepath.replace("-small",""); // from the thumbnail, get the full image path
+        imagepath = imagepath.replace("-small", ""); // from the thumbnail, get the full image path
         coloringBookPage.src = imagepath;
         coloringBookPage.onload = function () { // May take some time to load the src of the new image.  Just in case, do this:
             drawImageScaled(coloringBookPage);
-            //if (device.platform === 'iOS') {drawImageScaled(coloringBookPage, ctx0);}
-            //else {
-            //    alert('android');
-            //    ctx0.drawImage(coloringBookPage, 0, 0);
-            //};
         };
 
         $scope.coloringbookActionSheet = false;
@@ -773,11 +768,17 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         drawctx.imageSmoothingEnabled = false; // Important to get a drawing without pixeled edges       
         var hRatio = drawcanvas.width / drawimg.width;
         var vRatio = drawcanvas.height / drawimg.height;
-        var ratio  = Math.min ( hRatio, vRatio );
+        var ratio = Math.min(hRatio, vRatio);
         var centerShift_x = (drawcanvas.width - drawimg.width * ratio) / 2;
         var centerShift_y = (drawcanvas.height - drawimg.height * ratio) / 2;
-        drawctx.drawImage(drawimg, 0, 0, drawimg.width, drawimg.height, centerShift_x, centerShift_y, drawimg.width * ratio, drawimg.height * ratio);
-    }
+        if (device.platform === 'iOS') {
+            drawctx.drawImage(drawimg, 0, 0, drawimg.width, drawimg.height, centerShift_x, centerShift_y, drawimg.width * ratio, drawimg.height * ratio);
+        }
+        else {
+            drawimg.width = drawcanvas.width;
+            drawctx.drawImage(drawimg, 0, 0);
+        };
+    }; // end func
 
     // ==================================================================================================================================
     // ==================================================================================================================================
