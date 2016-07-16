@@ -721,7 +721,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         "./images/catface-small.svg",
         "./images/tigerface-small.svg",
         "./images/giraffe-small.svg",
-        //"./images/unicorn.svg",
+        "./images/shark-small.svg",
         //"./images/unicorn.svg",
         //"./images/unicorn.svg",
     ];
