@@ -386,7 +386,7 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
 
                           if (tempArray[x].picture_url == items[i].picture_url) {
 
-                              alert('found imageurl')
+                              ///alert('found imageurl')
                               // Inspect to know how to add to Object
                               // ------------
                               // cases: SharePicture - track this url.  Like Picture - append to tracked url.  
@@ -419,7 +419,7 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
                                           // Check to see if this Like (ImageID, UserID) is in the quick check array.  IF NOT, then add to local imagepropertiesarray
                                           // ------------------
                                           //alert(imageID + items[i].fromkid_id)
-                                          alert(likesArrayFlattened.indexOf(imageID + items[i].fromkid_id))
+                                          //alert(likesArrayFlattened.indexOf(imageID + items[i].fromkid_id))
                                           if (likesArrayFlattened.indexOf(imageID + items[i].fromkid_id) == -1) {  // Not found in array
                                               alert("adding new like");
                                               // Make new JSON element with the Like event details
@@ -454,7 +454,7 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
 
                       if ((imageurlfound == false) && (event_type == 'sharepicture')) {  // New SharedUrl found 
 
-                          alert('found unknow imageurl and share event')
+                          //alert('found unknow imageurl and share event')
 
                           // @@@@ Make new array object for UI 
                           // ==============================

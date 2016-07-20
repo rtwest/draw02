@@ -1,8 +1,9 @@
 W O R K I N G   R I G H T   N O W
 -----------------------------
 
-- ** PROBLEM: Gallery: on iOS
-	- Gallery not loaded on iOS.  You can save image and view in gallery, but when app loaded the Gallery images aren't found.
+- ** iOS: coloringbook not drawn down
+	- problem was iwth load src for image.  fixed by using already loaded src.
+	- current thing doesn't work.  You can see the image drawn down under.  And you can erase under it.
 
 - ** PROBLEM: 'Like' system not working
 

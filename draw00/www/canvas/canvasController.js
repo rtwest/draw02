@@ -422,10 +422,25 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         var h = window.innerHeight - 90;
 
         // if coloringBookPage is selected/has source, Write the coloringbook Canvas0 down on top of Canvas
-        // BUGGY. IT WORKS BUT IMAGE HAS NO SRC SO IS BLANK WHEN DRAWN DOWN.
         ctx.globalCompositeOperation = 'source-over'; // just to make sure
+        //var overlayimage = new Image();
+        //overlayimage.src = ctx0.canvas.toDataURL();
+        //overlayimage.onload = function () { 
+        //    ctx.drawImage(overlayimage, 0, 0); // Draw image down on top Canvas
+        //};
+
+        drawImageScaled(coloringBookPage, "canvas");
+
         //ctx.drawImage(coloringBookPage, 0, 0); // Draw image down on top Canvas
-        drawImageScaled(coloringBookPage, ctx);
+
+        //// Difference betweein iOS and Android
+        //if (device.platform === 'iOS') {
+        //    drawctx.drawImage(drawimg, 0, 0, drawimg.width, drawimg.height, centerShift_x, centerShift_y, drawimg.width * ratio, drawimg.height * ratio);
+        //}
+        //else {
+        //    drawimg.width = drawcanvas.width;
+        //    drawctx.drawImage(drawimg, 0, 0);
+        //};
 
         // IF no background image from camera, THEN fill background with white rectangle so it isn't transparent
         ctx.globalCompositeOperation = 'destination-over'; // draw behind current drawing
@@ -440,11 +455,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
             function (filepath) {
                 
                 //alert(filepath);
-
-                console.log('image file path is: ' + filepath); //filepath is the filename path (for android and iOS)
-
-                // Save filepath to PouchDB for gallery
-                // --------
+                //console.log('image file path is: ' + filepath); //filepath is the filename path (for android and iOS)
                 //var uid = new Date().toJSON(); // make the ID a timestamp because PouchDB returns ordered ID (so now by datetime)
 
                 // @@@ Put the image properties into localstorage
@@ -462,7 +473,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
             },
             function (err) {console.log(err);},
             document.getElementById('canvas') // This names the element that is the Canvas.  Other params can follow here with commas...format, quality,etc... ",'.jpg', 80," 
-       );   
+       );
         //$('#canvas').css('background-image', 'url()');// reset the CSS background 
 
     };
@@ -755,15 +766,15 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         imagepath = imagepath.replace("-small", ""); // from the thumbnail, get the full image path
         coloringBookPage.src = imagepath;
         coloringBookPage.onload = function () { // May take some time to load the src of the new image.  Just in case, do this:
-            drawImageScaled(coloringBookPage);
+            drawImageScaled(coloringBookPage, "canvas0");
         };
 
         $scope.coloringbookActionSheet = false;
     }; // end func
 
     //  Function to scale and center the coloring book overlay in the canvas
-    function drawImageScaled(drawimg) {
-        var drawcanvas = document.getElementById("canvas0");
+    function drawImageScaled(drawimg, canvasid) {
+        var drawcanvas = document.getElementById(canvasid);
         drawctx = drawcanvas.getContext("2d")
         drawctx.imageSmoothingEnabled = false; // Important to get a drawing without pixeled edges       
         var hRatio = drawcanvas.width / drawimg.width;
@@ -771,6 +782,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         var ratio = Math.min(hRatio, vRatio);
         var centerShift_x = (drawcanvas.width - drawimg.width * ratio) / 2;
         var centerShift_y = (drawcanvas.height - drawimg.height * ratio) / 2;
+        // Difference betweein iOS and Android
         if (device.platform === 'iOS') {
             drawctx.drawImage(drawimg, 0, 0, drawimg.width, drawimg.height, centerShift_x, centerShift_y, drawimg.width * ratio, drawimg.height * ratio);
         }
@@ -825,7 +837,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         coloringBookPageOverlay.src = "data:image/png;base64," + coloringBookPageSource;
         coloringBookPageOverlay.onload = function () { // May take some time to load the src of the new image.  Just in case, do this:
             //ctx0.drawImage(coloringBookPageOverlay, 0, 0); // Draw image down on top Canvas
-            drawImageScaled(coloringBookPageOverlay, ctx0);
+            drawImageScaled(coloringBookPageOverlay, "canvas0");
         };
 
         $scope.choosePen1();
