@@ -416,40 +416,35 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
 
 
     // Function to save the Canvas contents to an image on the file system
+    // NEED TO HAVE THE SAVECANVAS BELOW THE OTHER CANVAS SO COLORINGBOOK CANVAS WILL PASS BRUSH DOWN TO PRIMARY CANVAS
+    // NEED TO IF I NEED TO CLEAR SAVECANVAS AFTER SAVING.  IT IS CLEARED WITH WHITE RECTANGLE BEFORE SAVING.
     // ------------------------------------------------------------------
     $scope.saveImage = function () {
         var w = window.innerWidth;
         var h = window.innerHeight - 90;
-
         var savecanvas = document.getElementById("savecanvas");
         var savecanvasctx = savecanvas.getContext("2d");
-
         // Draw white background
         savecanvasctx.fillStyle = "#FFFFFF";
         savecanvasctx.fillRect(0, 0, w, h);
-
         // Copy drawing down
         var initimage = new Image();
         var initcanvas = document.getElementById("canvas");
         initimage.src = initcanvas.toDataURL();
         initimage.onload = function () {
             savecanvasctx.drawImage(initimage, 0, 0);
+            // Copy coloring book down
+            //drawImageScaled(coloringBookPage, "savecanvas"); // draw coloring book down
+            var initimage2 = new Image();
+            var initcanvas2 = document.getElementById("canvas0");
+            initimage2.src = initcanvas2.toDataURL();
+            initimage2.onload = function () {
+                savecanvasctx.drawImage(initimage2, 0, 0);
+                // Save the whole thing
+                saveImageDataToLibrary('savecanvas');
+            };
         };
-
-        // Copy coloring book down
-        //drawImageScaled(coloringBookPage, "savecanvas"); // draw coloring book down
-        var initimage2 = new Image();
-        var initcanvas2 = document.getElementById("canvas0");
-        initimage2.src = initcanvas2.toDataURL();
-        initimage2.onload = function () {
-            savecanvasctx.drawImage(initimage2, 0, 0);
-        };
-
-        // Call plugin to save this updated canvas to filsystem
-        saveImageDataToLibrary('savecanvas');
-
         //$('#canvas').css('background-image', 'url()');// reset the CSS background 
-        //document.getElementById("content").removeChild(savecanvas); // remove the saving canvas
     };
 
     // Using plugin to save to camera roll / photo gallery and return file path
