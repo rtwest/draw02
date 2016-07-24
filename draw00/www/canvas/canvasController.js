@@ -186,7 +186,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     $scope.newCanvas = function () {
         //define, resize, and insert canvas wiping out anything under "content" in the DOM
         document.getElementById("content").style.height = window.innerHeight - 200;
-        var canvas = '<canvas id="canvas0" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '" style="position: absolute; left: 0px; z-index: 1000;"></canvas><canvas id="canvas" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas>';
+        var canvas = '<canvas id="canvas0" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '" style="position: absolute; left: 0px; z-index: 1000;"></canvas><canvas id="canvas" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas><canvas id="savecanvas" style="z-index:-1" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas>';
         document.getElementById("content").innerHTML = canvas;
         // setup initial canvas
         ctx = document.getElementById("canvas").getContext("2d");
@@ -421,39 +421,41 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         var w = window.innerWidth;
         var h = window.innerHeight - 90;
 
-        // if coloringBookPage is selected/has source, Write the coloringbook Canvas0 down on top of Canvas
-        ctx.globalCompositeOperation = 'source-over'; // just to make sure
-        //var overlayimage = new Image();
-        //overlayimage.src = ctx0.canvas.toDataURL();
-        //overlayimage.onload = function () { 
-        //    ctx.drawImage(overlayimage, 0, 0); // Draw image down on top Canvas
-        //};
+        var savecanvas = document.getElementById("savecanvas");
+        var savecanvasctx = savecanvas.getContext("2d");
 
-        drawImageScaled(coloringBookPage, "canvas");
+        // Draw white background
+        savecanvasctx.fillStyle = "#FFFFFF";
+        savecanvasctx.fillRect(0, 0, w, h);
 
-        //ctx.drawImage(coloringBookPage, 0, 0); // Draw image down on top Canvas
+        // Copy drawing down
+        var initimage = new Image();
+        var initcanvas = document.getElementById("canvas");
+        initimage.src = initcanvas.toDataURL();
+        initimage.onload = function () {
+            savecanvasctx.drawImage(initimage, 0, 0);
+        };
 
-        //// Difference betweein iOS and Android
-        //if (device.platform === 'iOS') {
-        //    drawctx.drawImage(drawimg, 0, 0, drawimg.width, drawimg.height, centerShift_x, centerShift_y, drawimg.width * ratio, drawimg.height * ratio);
-        //}
-        //else {
-        //    drawimg.width = drawcanvas.width;
-        //    drawctx.drawImage(drawimg, 0, 0);
-        //};
+        // Copy coloring book down
+        //drawImageScaled(coloringBookPage, "savecanvas"); // draw coloring book down
+        var initimage2 = new Image();
+        var initcanvas2 = document.getElementById("canvas0");
+        initimage2.src = initcanvas2.toDataURL();
+        initimage2.onload = function () {
+            savecanvasctx.drawImage(initimage2, 0, 0);
+        };
 
-        // IF no background image from camera, THEN fill background with white rectangle so it isn't transparent
-        ctx.globalCompositeOperation = 'destination-over'; // draw behind current drawing
-        ctx.globalAlpha = 1; // Because the brush canvas CSS is set to 50% transparent, make sure set to 1.0 before drawing.
-        ctx.fillStyle = "#FFFFFF";
-        ctx.fillRect(0, 0, w, h);
-        ctx.globalCompositeOperation = 'source-over'; // reset this back to drawing
+        // Call plugin to save this updated canvas to filsystem
+        saveImageDataToLibrary('savecanvas');
 
-        // Using plugin to save to camera roll / photo gallery and return file path
-        // ---
+        //$('#canvas').css('background-image', 'url()');// reset the CSS background 
+        //document.getElementById("content").removeChild(savecanvas); // remove the saving canvas
+    };
+
+    // Using plugin to save to camera roll / photo gallery and return file path
+    function saveImageDataToLibrary(CanvasID) {
         window.canvas2ImagePlugin.saveImageDataToLibrary(
             function (filepath) {
-                
                 //alert(filepath);
                 //console.log('image file path is: ' + filepath); //filepath is the filename path (for android and iOS)
                 //var uid = new Date().toJSON(); // make the ID a timestamp because PouchDB returns ordered ID (so now by datetime)
@@ -472,10 +474,8 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
 
             },
             function (err) {console.log(err);},
-            document.getElementById('canvas') // This names the element that is the Canvas.  Other params can follow here with commas...format, quality,etc... ",'.jpg', 80," 
+            document.getElementById(CanvasID) // This names the element that is the Canvas.  Other params can follow here with commas...format, quality,etc... ",'.jpg', 80," 
        );
-        //$('#canvas').css('background-image', 'url()');// reset the CSS background 
-
     };
 
 
@@ -809,7 +809,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
 
         //define, resize, and insert canvas wiping out anything under "content" in the DOM
         document.getElementById("content").style.height = window.innerHeight - 200;
-        var canvas = '<canvas id="canvas0" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '" style="position: absolute; left: 0px; z-index: 1000;"></canvas><canvas id="canvas" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas>';
+        var canvas = '<canvas id="canvas0" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '" style="position: absolute; left: 0px; z-index: 1000;"></canvas><canvas id="canvas" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas><canvas id="savecanvas" style="z-index:-1" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas>';
         document.getElementById("content").innerHTML = canvas;
 
         // setup initial canvases
@@ -847,7 +847,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
 
         //define, resize, and insert canvas wiping out anything under "content" in the DOM
         document.getElementById("content").style.height = window.innerHeight - 200;
-        var canvas = '<canvas id="canvas0" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '" style="position: absolute; left: 0px; z-index: 1000;"></canvas><canvas id="canvas" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas>';
+        var canvas = '<canvas id="canvas0" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '" style="position: absolute; left: 0px; z-index: 1000;"></canvas><canvas id="canvas" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas><canvas id="savecanvas" style="z-index:-1" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas>';
         document.getElementById("content").innerHTML = canvas;
         // setup initial canvas
         ctx = document.getElementById("canvas").getContext("2d");
