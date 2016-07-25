@@ -1,10 +1,7 @@
 W O R K I N G   R I G H T   N O W
 -----------------------------
 
-- ** iOS: coloringbook not drawn down
-	- problem was iwth load src for image.  fixed by using already loaded src.
-	- current thing doesn't work.  You can see the image drawn down under.  And you can erase under it.
-
+- ** run full test for friends sharing and liking, then with parent sharing and liking.
 - ** PROBLEM: 'Like' system not working
 
 - Collapsing repeat share event events, when looking at a client sharing to several people at once	- /// @@@@@@  HAVE TO BE SIGNED IN AS ADMIN TO TEST THIS OUT.
@@ -18,14 +15,14 @@ W O R K I N G   R I G H T   N O W
  TO DO
 -----------------------------
 - XX - RESEARCH - WHY THE FAIL ON CONNECTING TO AZURE SOMETIMES?
-- RESEARCH - ALSO NEED TO CLEAN BLOB STORAGE WEEKLY.  Maybe have to convert mobile services to app services.  Get scheduler.  Web Pages.  New Pricing?? 
+- XX - RESEARCH - ALSO NEED TO CLEAN BLOB STORAGE WEEKLY.  Maybe have to convert mobile services to app services.  Get scheduler.  Web Pages.  New Pricing?? 
 - * Loaders and Progress indicators when awaiting on Azure response
 - * Need better Picture Save Indicator.  Need better Picuture Shared indicator
 - Need to check for web connection on load and alert
 - ??? Need to restrict permissions on azure tables to authenticate users for admin and client(probably) 
 - Kid Design Like Nintendo 3DS - Class DoJo - sticker like white borders and box shadows
 - Clients create Avatar - Random Avatar like HopScotch
- - add paint bucket, sized erasers, print option, only color in the lines
+ - Lanie says - add paint bucket, sized erasers, print option, only color in the lines
 
 
 P R O B L E M S

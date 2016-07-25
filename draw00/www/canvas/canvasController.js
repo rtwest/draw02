@@ -186,7 +186,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     $scope.newCanvas = function () {
         //define, resize, and insert canvas wiping out anything under "content" in the DOM
         document.getElementById("content").style.height = window.innerHeight - 200;
-        var canvas = '<canvas id="canvas0" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '" style="position: absolute; left: 0px; z-index: 1000;"></canvas><canvas id="canvas" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas><canvas id="savecanvas" style="z-index:-1" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas>';
+        var canvas = '<canvas id="canvas0" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '" style="position: absolute; left: 0px; z-index: 1000;"></canvas><canvas id="canvas" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas><canvas id="savecanvas" style="position: absolute; left: 0px; z-index:-100; display:none" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas>';
         document.getElementById("content").innerHTML = canvas;
         // setup initial canvas
         ctx = document.getElementById("canvas").getContext("2d");
@@ -416,8 +416,6 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
 
 
     // Function to save the Canvas contents to an image on the file system
-    // NEED TO HAVE THE SAVECANVAS BELOW THE OTHER CANVAS SO COLORINGBOOK CANVAS WILL PASS BRUSH DOWN TO PRIMARY CANVAS
-    // NEED TO IF I NEED TO CLEAR SAVECANVAS AFTER SAVING.  IT IS CLEARED WITH WHITE RECTANGLE BEFORE SAVING.
     // ------------------------------------------------------------------
     $scope.saveImage = function () {
         var w = window.innerWidth;
@@ -804,7 +802,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
 
         //define, resize, and insert canvas wiping out anything under "content" in the DOM
         document.getElementById("content").style.height = window.innerHeight - 200;
-        var canvas = '<canvas id="canvas0" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '" style="position: absolute; left: 0px; z-index: 1000;"></canvas><canvas id="canvas" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas><canvas id="savecanvas" style="z-index:-1" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas>';
+        var canvas = '<canvas id="canvas0" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '" style="position: absolute; left: 0px; z-index: 1000;"></canvas><canvas id="canvas" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas><canvas id="savecanvas" style="position: absolute; left: 0px; z-index:-100; display:none" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas>';
         document.getElementById("content").innerHTML = canvas;
 
         // setup initial canvases
@@ -831,7 +829,6 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         var coloringBookPageOverlay = new Image();
         coloringBookPageOverlay.src = "data:image/png;base64," + coloringBookPageSource;
         coloringBookPageOverlay.onload = function () { // May take some time to load the src of the new image.  Just in case, do this:
-            //ctx0.drawImage(coloringBookPageOverlay, 0, 0); // Draw image down on top Canvas
             drawImageScaled(coloringBookPageOverlay, "canvas0");
         };
 
@@ -842,7 +839,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
 
         //define, resize, and insert canvas wiping out anything under "content" in the DOM
         document.getElementById("content").style.height = window.innerHeight - 200;
-        var canvas = '<canvas id="canvas0" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '" style="position: absolute; left: 0px; z-index: 1000;"></canvas><canvas id="canvas" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas><canvas id="savecanvas" style="z-index:-1" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas>';
+        var canvas = '<canvas id="canvas0" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '" style="position: absolute; left: 0px; z-index: 1000;"></canvas><canvas id="canvas" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas><canvas id="savecanvas" style="position: absolute; left: 0px; z-index:-100; display:none" width="' + window.innerWidth + '" height="' + (window.innerHeight - 200) + '"></canvas>';
         document.getElementById("content").innerHTML = canvas;
         // setup initial canvas
         ctx = document.getElementById("canvas").getContext("2d");
