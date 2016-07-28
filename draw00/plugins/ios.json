@@ -22,10 +22,11 @@
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.rockitshop.cordovapushnotification"
         },
-        "phonegap-plugin-push": {
+        "org.rtwest.Canvas2ImagePlugin": {
             "PACKAGE_NAME": "com.rockitshop.cordovapushnotification"
         },
-        "org.rtwest.Canvas2ImagePlugin": {
+        "phonegap-plugin-push": {
+            "SENDER_ID": "168753624064",
             "PACKAGE_NAME": "com.rockitshop.cordovapushnotification"
         }
     },

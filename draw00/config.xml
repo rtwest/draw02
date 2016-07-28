@@ -119,10 +119,12 @@
   <preference name="android-minSdkVersion" value="19" />
   <plugin name="cordova-plugin-device" version="1.0.1" />
   <plugin name="cordova-plugin-dialogs" version="1.1.1" />
-  <plugin name="phonegap-plugin-push" version="1.5.2" src="https://github.com/phonegap/phonegap-plugin-push.git" />
   <plugin name="com.microsoft.azure-mobile-services" version="1.2.9" />
   <preference name="BackupWebStorage" value="cloud" />
   <plugin name="cordova-plugin-inappbrowser" version="1.2.1" />
   <plugin name="org.rtwest.Canvas2ImagePlugin" version="0.7.1" src="https://github.com/rtwest/Canvas2ImagePlugin.git" />
   <preference name="android-maxSdkVersion" value="22" />
+  <plugin name="phonegap-plugin-push" version="1.8.0">
+    <variable name="SENDER_ID" value="168753624064" />
+  </plugin>
 </widget>

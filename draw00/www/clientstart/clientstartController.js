@@ -277,6 +277,9 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
                   console.log('no events in last 2 weeks')
               }
               else {
+
+                  alert(JSON.stringify(items));
+
                   // Go through Friend items and reorder it 
                   // --------------------------------------
                   var tempArray = [];
@@ -341,7 +344,7 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
                       else { from_check = items[i].fromkid_name };
 
 
-                      // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                      // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
                       //make a new array based on urls.  url is like object key index.  its all about the Image Url.
                       //then each event adds properties around that url Object
@@ -404,13 +407,17 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
                                   alert('new kid shared with - ' + JSON.stringify(tempArray[x]));
                               }
 
+                                  // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2
                               // url, liked, from any kid
                               else if (event_type == 'like') {
+                                  alert("Like found");
                                   // Update your reply in the ToKid element
                                   // ------------
                                   //tempArray[x].tokid[items[i].tokid_id == clientGUID].tokidreply = items[i].comment_content
                                   var kidArrayLength = tempArray[x].tokid.length; // 'tokid' is a subarray
                                   for (y = 0; y < kidArrayLength; y++) { // Loop through to subarray for tokid_id
+                                      alert(tempArray[x].tokid[y].tokid_id + " " + items[i].fromkid_id);
+
                                       if (tempArray[x].tokid[y].tokid_id == items[i].fromkid_id) {
                                           tempArray[x].tokid[y].tokidreply = 'likes' //items[i].comment_content
                                           alert('updated kid response - ' + JSON.stringify(tempArray[x]));

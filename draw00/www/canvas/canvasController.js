@@ -600,7 +600,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         // Save Canvas and combine any Background image first.  @@ No background image yet!!
         //$scope.saveImage();
 
-        var mycanvas = document.getElementById('canvas');
+        var mycanvas = document.getElementById('savecanvas');
         var blob = dataURItoBlob(mycanvas.toDataURL("image/png", 1.0));// Convert the Base64 encoded image to just the blob
 
 

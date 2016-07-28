@@ -43,6 +43,7 @@ cordovaNG.controller('gallerypictureController', function ($scope, $http, global
     var picturesplitarray = globalService.pictureViewParams.split(","); // Global var passed to the view. The div ID had 2 values shoved in. Split string into array by ","
     $scope.pictureID = picturesplitarray[0];
     $scope.pictureFilePath = picturesplitarray[1];
+
     // -------------------
 
 
