@@ -72,21 +72,29 @@ cordovaNG.controller('clientpropertiesController', function ($scope, globalServi
                       var today = new Date(); // today for comparison
                       var day, time, fromkid, tokid, lastimageurl;
                       thiseventday = new Date();
-                      lasteventday = new Date();
+                      //lasteventday = new Date();
+                      nexteventday = new Date();
                       montharray = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
                       // @@@ ON THE ADMIN SIDE, DO YOU REVERSE ITEMS BEFORE BUILDING THEM?
-                      items = items.reverse()  // @@@ This puts them in newwest first order.  
+                      //items = items.reverse()  // @@@ This puts them in newwest first order.  
 
                       for (i = 0; i < len; i++) {
 
-                          lasteventday = thiseventday; // when i=0, this is useless and skipped over with coniditional below
+                          //lasteventday = thiseventday; // when i=0, this is useless and skipped over with coniditional below
                           thiseventday = new Date(items[i].datetime); // convert datetime to number
+                          if ((i + 1) < len) { //  Don't go over array length
+                              nexteventday = new Date(items[i + 1].datetime);
+                          };
 
                           // @@@ Get Day - Compare Day and Month
                           // ---------------------
-                          if (i > 0) { // If this is NOT first in array, check if you need to show it.
-                              if ((thiseventday.getDate() == lasteventday.getDate()) && (thiseventday.getMonth() == lasteventday.getMonth())) {
+                          //if (i > 0) { // If this is NOT first in array, check if you need to show it.
+                          if (i < (len-1)) { // If this is NOT last in array, check if you need to show it.
+                              //if ((thiseventday.getDate() == lasteventday.getDate()) && (thiseventday.getMonth() == lasteventday.getMonth())) {
+                              //    day = null; // then it's the same as the last one and don't need to repeat the date
+                              //}
+                              if ((thiseventday.getDate() == nexteventday.getDate()) && (thiseventday.getMonth() == nexteventday.getMonth())) {
                                   day = null; // then it's the same as the last one and don't need to repeat the date
                               }
                                   // may never have this case?
@@ -249,9 +257,9 @@ cordovaNG.controller('clientpropertiesController', function ($scope, globalServi
                       }; //end for
 
                       //@@@@@@@@@@@@@@@@@@@@@@@
-                      //$scope.eventarray = tempArray.reverse(); // For some reason, this was reversing the order of the list chronologically
-                      $scope.eventarray = tempArray;
-                      alert(JSON.stringify($scope.eventarray))
+                      $scope.eventarray = tempArray.reverse(); // For some reason, this was reversing the order of the list chronologically
+                      //$scope.eventarray = tempArray;
+                      //alert(JSON.stringify($scope.eventarray))
 
                   }; // end if
 

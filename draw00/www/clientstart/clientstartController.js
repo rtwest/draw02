@@ -281,27 +281,35 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
                   alert(JSON.stringify(items));
 
                   // Go through Friend items and reorder it 
-                  // --------------------------------------
+                  // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                   var tempArray = [];
                   var len = items.length;
                   var today = new Date(); // today for comparison
                   var day, time, fromkid, tokid, lastimageurl, lasteventtype;
                   thiseventday = new Date();
-                  lasteventday = new Date();
+                  //lasteventday = new Date();
+                  nexteventday = new Date();
                   montharray = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
                   // @@@ ON THE ADMIN SIDE, DO YOU REVERSE ITEMS BEFORE BUILDING THEM?
-                  items = items.reverse()  // @@@ This puts them in newwest first order.
+                  //items = items.reverse()  // @@@ This puts them in newwest first order.  BUT THEN YOU CAN'T FIND LIKES
 
                   for (i = 0; i < len; i++) {
 
-                      lasteventday = thiseventday; // when i=0, this is useless and skipped over with coniditional below
+                      //lasteventday = thiseventday; // when i=0, this is useless and skipped over with coniditional below
                       thiseventday = new Date(items[i].datetime); // convert datetime to number
+                      if ((i + 1) < len) { //  Don't go over array length
+                          nexteventday = new Date(items[i + 1].datetime);
+                      };
 
                       // @@@ Get Day - Compare Day and Month
                       // ---------------------
-                      if (i > 0) { // If this is NOT first in array, check if you need to show it.
-                          if ((thiseventday.getDate() == lasteventday.getDate()) && (thiseventday.getMonth() == lasteventday.getMonth())) {
+                      //if (i > 0) { // If this is NOT first in array, check if you need to show it.
+                      if (i < (len-1)) { // If this is NOT last in array, check if you need to show it.
+                          //if ((thiseventday.getDate() == lasteventday.getDate()) && (thiseventday.getMonth() == lasteventday.getMonth())) {
+                          //    day = null; // then it's the same as the last one and don't need to repeat the date
+                          //}
+                          if ((thiseventday.getDate() == nexteventday.getDate()) && (thiseventday.getMonth() == nexteventday.getMonth())) {
                               day = null; // then it's the same as the last one and don't need to repeat the date
                           }
                               // may never have this case?
@@ -312,7 +320,7 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
                               day = 'Yesterday';}
                           else { day = montharray[thiseventday.getMonth()] + " " + thiseventday.getDate(); }
                       }
-                      else { // If this IS first in array, then it has to have the date header
+                      else { // If this IS last in array, then it has to have the date header
                           if ((thiseventday.getDate() == today.getDate()) && (thiseventday.getMonth() == today.getMonth())) {
                               day = 'Today';}
                               // If Day is Today-1, Then its Yesterday
@@ -373,7 +381,7 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
                               time: time,
                           };
                           tempArray.push(element); // add into array for UI & $scope
-                          alert('updated with new imageurl share event - ' + JSON.stringify(tempArray));
+                          //alert('updated with new imageurl share event - ' + JSON.stringify(tempArray));
                       }
 
                       else { // If not a 'friend' event, it should have a URL
@@ -404,23 +412,23 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
                                       tokidreply: '', //null in this case
                                   };
                                   tempArray[x].tokid.push(kidobject);
-                                  alert('new kid shared with - ' + JSON.stringify(tempArray[x]));
+                                  //alert('new kid shared with - ' + JSON.stringify(tempArray[x]));
                               }
 
-                                  // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2
+                                  // @@@@@@@@@@@@@@@@@@@@
                               // url, liked, from any kid
                               else if (event_type == 'like') {
-                                  alert("Like found");
+                                  //alert("Like found");
                                   // Update your reply in the ToKid element
                                   // ------------
                                   //tempArray[x].tokid[items[i].tokid_id == clientGUID].tokidreply = items[i].comment_content
                                   var kidArrayLength = tempArray[x].tokid.length; // 'tokid' is a subarray
                                   for (y = 0; y < kidArrayLength; y++) { // Loop through to subarray for tokid_id
-                                      alert(tempArray[x].tokid[y].tokid_id + " " + items[i].fromkid_id);
+                                      //alert(tempArray[x].tokid[y].tokid_id + " " + items[i].fromkid_id);
 
                                       if (tempArray[x].tokid[y].tokid_id == items[i].fromkid_id) {
                                           tempArray[x].tokid[y].tokidreply = 'likes' //items[i].comment_content
-                                          alert('updated kid response - ' + JSON.stringify(tempArray[x]));
+                                          //alert('updated kid response - ' + JSON.stringify(tempArray[x]));
 
                                           // @@@@ NEED TO SAVE LIKES INTO LOCAL IMAGEPROPERTIES ARRAY.  
                                           // Check to see if this Like (ImageID, UserID) is in the quick check array.  IF NOT, then add to local imagepropertiesarray
@@ -428,7 +436,7 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
                                           //alert(imageID + items[i].fromkid_id)
                                           //alert(likesArrayFlattened.indexOf(imageID + items[i].fromkid_id))
                                           if (likesArrayFlattened.indexOf(imageID + items[i].fromkid_id) == -1) {  // Not found in array
-                                              alert("adding new like");
+                                              //alert("adding new like");
                                               // Make new JSON element with the Like event details
                                               var event = items[i].event_type;
                                               var name = items[i].fromkid_name;
@@ -444,7 +452,7 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
                                                   };
                                               }; //end for
                                               localStorage["RYB_imagepropertiesarray"] = JSON.stringify(imagepropertiesarray); //push back to localStorage
-                                              alert("update image array with like comment" + JSON.stringify(imagepropertiesarray))
+                                              //alert("update image array with like comment" + JSON.stringify(imagepropertiesarray))
                                           };
 
                                           break;
@@ -483,7 +491,7 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
                               time: time,
                           };
                           tempArray.push(element); // add into array for UI & $scope
-                          alert('updated with new imageurl share event - ' + JSON.stringify(tempArray));
+                          //alert('updated with new imageurl share event - ' + JSON.stringify(tempArray));
                       };
 
                       }; //end if event type
@@ -492,10 +500,10 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
 
 
                   // @@@ Push the cleaned up array of objects into the $scope
-                  //globalService.eventArray = tempArray.reverse();// Reverse order of array so most recent is first
-                  globalService.eventArray = tempArray;
+                  globalService.eventArray = tempArray.reverse();// Reverse order of array so most recent is first
+                  //globalService.eventArray = tempArray;
                   $scope.eventarray = globalService.eventArray;
-                  alert("Event array - "+JSON.stringify($scope.eventarray))
+                  //alert("Event array - "+JSON.stringify($scope.eventarray))
 
               }; // end if
 

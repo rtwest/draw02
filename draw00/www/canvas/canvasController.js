@@ -527,8 +527,7 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
         // 2. Then go through shareArray to make the Event per friend
         sharecount = 0;
         sharearraylength = $scope.shareSelectionArray.length;
-        $scope.saveImage() // When you are sharing the image, also save it to you Gallery
-        $scope.uploadImage(); // @@@ When this is done, it will call shareOutToFriends to Insert Event records in Azure to Friends
+        SaveandUploadImage(); // @@@ When this is done, it will call shareOutToFriends to Insert Event records in Azure to Friends
     };
 
     //  @@@ After image is uploaded, this is the loop to Share per friend
@@ -587,18 +586,47 @@ cordovaNG.controller('canvasController', function ($scope, $http, globalService,
     // UPLOADING TO AZURE
     // -----------------------------------------------------------------------
 
+    function SaveandUploadImage () {
+        // Save part
+        // -----
+        var w = window.innerWidth;
+        var h = window.innerHeight - 90;
+        var savecanvas = document.getElementById("savecanvas");
+        var savecanvasctx = savecanvas.getContext("2d");
+        // Draw white background
+        savecanvasctx.fillStyle = "#FFFFFF";
+        savecanvasctx.fillRect(0, 0, w, h);
+        // Copy drawing down
+        var initimage = new Image();
+        var initcanvas = document.getElementById("canvas");
+        initimage.src = initcanvas.toDataURL();
+        initimage.onload = function () {
+            savecanvasctx.drawImage(initimage, 0, 0);
+            // Copy coloring book down
+            //drawImageScaled(coloringBookPage, "savecanvas"); // draw coloring book down
+            var initimage2 = new Image();
+            var initcanvas2 = document.getElementById("canvas0");
+            initimage2.src = initcanvas2.toDataURL();
+            initimage2.onload = function () {
+                savecanvasctx.drawImage(initimage2, 0, 0);
+                // Save the whole thing
+                saveImageDataToLibrary('savecanvas');
+                // Upload part
+                // ----------- // This has to be chained
+                uploadImage();
+            };
+        };
+        //$('#canvas').css('background-image', 'url()');// reset the CSS background 
+    };
+
 
     // To upload file to Azure blob storage.  1. Call API to get a sasURL.  2. PUT the file using the sasURL 
     //  Upload call SaveImage and implicityly saves the canvas and and background to the 'photolibrary'
     // ----------------------------------
-    $scope.uploadImage = function () {
-
+    function uploadImage() {
         var sasUrl;
         var photoId;
         var requestUrl = "https://service-poc.azure-mobile.net/api/getuploadblobsas" // URL to the custom rest API
-
-        // Save Canvas and combine any Background image first.  @@ No background image yet!!
-        //$scope.saveImage();
 
         var mycanvas = document.getElementById('savecanvas');
         var blob = dataURItoBlob(mycanvas.toDataURL("image/png", 1.0));// Convert the Base64 encoded image to just the blob

@@ -1,11 +1,7 @@
 W O R K I N G   R I G H T   N O W
 -----------------------------
 
-- ** PROBLEM: Push notification not received on iOS.
-
-- ** PROBLEM: 'Like' system not working
-	- Likes are in Azure Event Log but not getting processed when pulled down.
-	- not matching the ToKid the drawing shared with and FromKid the Like came from
+- ** PROBLEM: Push notification not received on iOS.  iOS sends through Node.js fine.  APN not sending to device.  Problem with Certificates?
 
 - ** PROBLEM: Admin side doesn't have it's own event log to see when someone shared with you.
 
