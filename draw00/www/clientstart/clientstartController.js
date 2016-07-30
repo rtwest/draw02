@@ -6,149 +6,6 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
     //$scope.message = "Nothing here yet";  //- TEST ONLY
 
 
-    // FOR TESTING HERE ONLY
-    // FOR TESTING HERE ONLY
-    // FOR TESTING HERE ONLY
-    // FOR TESTING HERE ONLY
-    // ==========================================
-    //  Insert an Friend in the Event log based on Client GUID
-    // ==========================================
-
-    //var kid2_id = globalService.makeUniqueID();
-    //var kid3_id = globalService.makeUniqueID();
-    //var kid2_name = "Percy"
-    //var kid3_name = "SheRah"
-    //var kid1_id = 'fa530f03-c3dc-4c10-9c0f-ce0ec2a5ff5e';
-    //var kid1_name = 'Jason'
-
-    //Azureservice.insert('kid', {
-    //    id: kid2_id,
-    //    name: kid2_name,
-    //    parent_id: 'abe24128-e508-4d04-a450-10f33d5a07a5',
-    //    registration_code: 'TEST',
-    //    reg_status: "1",
-    //    avatar_id: "2",
-    //    parent_name: "test",
-    //    parent_email: "test",
-    //})
-    //.then(function () {
-    //    console.log('Insert successful');
-    //}, function (err) {
-    //    console.log('Azure Error: ' + err);
-    //});
-    //Azureservice.insert('kid', {
-    //    id: kid3_id,
-    //    name: kid3_name,
-    //    parent_id: 'abe24128-e508-4d04-a450-10f33d5a07a5',
-    //    registration_code: 'TEST',
-    //    reg_status: "1",
-    //    avatar_id: "3",
-    //    parent_name: "test",
-    //    parent_email: "test",
-    //})
-    //.then(function () {
-    //    console.log('Insert successful');
-    //}, function (err) {
-    //    console.log('Azure Error: ' + err);
-    //});
-
-
-
-    //Azureservice.insert('friends', {
-    //    //id: globalService.makeUniqueID(), // i don't need to track this so let Azure handle it
-    //    kid1_id: kid1_id,
-    //    kid1_name: kid1_name,
-    //    kid2_id: kid2_id,
-    //    kid2_name: kid2_name,
-    //})
-    //.then(function () {
-    //    console.log('Insert successful');
-    //}, function (err) {
-    //    console.log('Azure Error: ' + err);
-    //});
-
-    //Azureservice.insert('events', {
-    //    //id: guid, // I'll let Azure handle this GUID since I don't need to track it locally        
-    //    fromkid_id: "fa530f03-c3dc-4c10-9c0f-ce0ec2a5ff5e",
-    //    tokid_id: "d5a254c8-57cd-4d5a-807c-f4b5f603814d",
-    //    fromkid_avatar: "2",
-    //    tokid_avatar: "2",
-    //    fromkid_name: "Jason",
-    //    tokid_name: "Percy",
-    //    datetime: Date.now(),
-    //    event_type: "friends",
-    //})
-    //.then(function () {
-    //    alert('freind record inserted');
-    //    console.log('new event insert successful');
-    //},
-    //function (err) {
-    //    console.error('Azure Error: ' + err);
-    //});
-
-    //Azureservice.insert('friends', {
-    //    //id: globalService.makeUniqueID(), // i don't need to track this so let Azure handle it
-    //    kid1_id: kid1_id,
-    //    kid1_name: kid1_name,
-    //    kid2_id: kid3_id,
-    //    kid2_name: kid3_name,
-    //})
-    //.then(function () {
-    //    console.log('Insert successful');
-    //}, function (err) {
-    //    console.log('Azure Error: ' + err);
-    //});
-
-    //Azureservice.insert('events', {
-    //    fromkid_id: '7adfe169-3113-4b51-95ad-6e3c48e0a14e',
-    //    tokid_id: 'fa530f03-c3dc-4c10-9c0f-ce0ec2a5ff5e',
-    //    fromkid_name: 'Piper',
-    //    tokid_name: 'Jason',
-    //    event_type: 'like',
-    //    picture_url: 'https://rtwdevstorage.blob.core.windows.net/imagecontainer/763944bd-beca-464b-81b8-d3207801789a.png',
-    //    fromkid_avatar: 1,
-    //    tokid_avatar: 2,
-    //    datetime: Date.now(),
-    //    comment_content:'',
-    //})
-    //.then(function () {
-    //    console.log('Insert successful');
-    //}, function (err) {
-    //    console.log('Azure Error: ' + err);
-    //});
-
-    //Azureservice.insert('events', {
-    //    //id: globalService.makeUniqueID(), // i don't need to track this so let Azure handle it
-    //    picture_url: 'https://rtwdevstorage.blob.core.windows.net/imagecontainer/9239786136196.png',
-    //    fromkid_id: '7adfe169-3113-4b51-95ad-6e3c48e0a14e',
-    //    fromkid_name: 'Piper',
-    //    event_type: "sharepicture", // 
-    //    tokid_id: 'fa530f03-c3dc-4c10-9c0f-ce0ec2a5ff5e',
-    //    tokid_name: 'Jason',
-    //    fromkid_avatar: 1,
-    //    tokid_avatar: 2,
-    //    //comment_content: 'this is a comment here',
-    //    datetime: Date.now(),
-    //})
-    //.then(function () {
-    //    console.log('Insert successful');
-    //}, function (err) {
-    //    console.log('Azure Error: ' + err);
-    //});
-
-    // ==========================================
-
-
-
-
-
-
-
-
-
-
-
-    //var tempArray = [];
 
     // ==========================================
     //  Get local user name, guid, and avatar
@@ -163,7 +20,6 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
     // Set the local data model here to the data in the global service between views
     $scope.eventarray = globalService.eventArray;
     $scope.friendArray = globalService.friendArray;
-    //alert(globalService.lastTimeChecked);
 
     if (globalService.lastTimeChecked < (Date.now() - 300000)) { // if last data pull was over 5 MIN ago, then check again
         getEventLog();
@@ -173,7 +29,7 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
 
 
     // ==========================================
-    //  Get friends from Azure based on Client GUID.  THIS CODE USED ON CLIENTPROPERTIESCONTROLLER.JS and CLIENTSTARTCONTROLLER.JS
+    //  Get friends from Azure based on Client GUID.  
     // ==========================================
     var len, j;
 
@@ -225,13 +81,6 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
                     globalService.friendArray = tempFriendArray;
                     $scope.friendArray = globalService.friendArray; // @@@ Set to $scope array
 
-                    // XXXX REMOVED
-                    //// Different way of setting up the loop 
-                    //j = 0;
-                    //len = tempFriendArray.length;
-                    ////alert(len);
-                    //getkiddetails(); // @@@ Call recursive Azure call
-
                 };
             }).catch(function (error) {
                 console.log(error); alert(error);
@@ -243,7 +92,7 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
 
 
     // ==========================================
-    //  Get the Event log based on Client GUID.   THIS CODE USED ON CLIENTPROPERTIESCONTROLLER.JS and CLIENTSTARTCONTROLLER.JS
+    //  Get the Event log based on Client GUID.   THIS CODE USED ON CLIENTPROPERTIESCONTROLLER.JS and CLIENTSTARTCONTROLLER.JS and ADMINDASHCONTROLLER.JS
     // ==========================================
 
     function getEventLog() {
@@ -262,8 +111,6 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
                 };
             }; //end for
         };
-        //alert("likes array is = " + likesArrayFlattened);
-
 
 
         var tempArray = []; // This resets the local array (which $scope is set to later)
@@ -278,25 +125,17 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
               }
               else {
 
-                  alert(JSON.stringify(items));
-
-                  // Go through Friend items and reorder it 
-                  // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                  // Go through Event items and reorder it 
                   var tempArray = [];
                   var len = items.length;
                   var today = new Date(); // today for comparison
                   var day, time, fromkid, tokid, lastimageurl, lasteventtype;
                   thiseventday = new Date();
-                  //lasteventday = new Date();
                   nexteventday = new Date();
                   montharray = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-                  // @@@ ON THE ADMIN SIDE, DO YOU REVERSE ITEMS BEFORE BUILDING THEM?
-                  //items = items.reverse()  // @@@ This puts them in newwest first order.  BUT THEN YOU CAN'T FIND LIKES
-
                   for (i = 0; i < len; i++) {
 
-                      //lasteventday = thiseventday; // when i=0, this is useless and skipped over with coniditional below
                       thiseventday = new Date(items[i].datetime); // convert datetime to number
                       if ((i + 1) < len) { //  Don't go over array length
                           nexteventday = new Date(items[i + 1].datetime);
@@ -304,11 +143,7 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
 
                       // @@@ Get Day - Compare Day and Month
                       // ---------------------
-                      //if (i > 0) { // If this is NOT first in array, check if you need to show it.
                       if (i < (len-1)) { // If this is NOT last in array, check if you need to show it.
-                          //if ((thiseventday.getDate() == lasteventday.getDate()) && (thiseventday.getMonth() == lasteventday.getMonth())) {
-                          //    day = null; // then it's the same as the last one and don't need to repeat the date
-                          //}
                           if ((thiseventday.getDate() == nexteventday.getDate()) && (thiseventday.getMonth() == nexteventday.getMonth())) {
                               day = null; // then it's the same as the last one and don't need to repeat the date
                           }
@@ -381,7 +216,6 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
                               time: time,
                           };
                           tempArray.push(element); // add into array for UI & $scope
-                          //alert('updated with new imageurl share event - ' + JSON.stringify(tempArray));
                       }
 
                       else { // If not a 'friend' event, it should have a URL
@@ -412,31 +246,24 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
                                       tokidreply: '', //null in this case
                                   };
                                   tempArray[x].tokid.push(kidobject);
-                                  //alert('new kid shared with - ' + JSON.stringify(tempArray[x]));
                               }
 
                                   // @@@@@@@@@@@@@@@@@@@@
                               // url, liked, from any kid
                               else if (event_type == 'like') {
-                                  //alert("Like found");
                                   // Update your reply in the ToKid element
                                   // ------------
                                   //tempArray[x].tokid[items[i].tokid_id == clientGUID].tokidreply = items[i].comment_content
                                   var kidArrayLength = tempArray[x].tokid.length; // 'tokid' is a subarray
                                   for (y = 0; y < kidArrayLength; y++) { // Loop through to subarray for tokid_id
-                                      //alert(tempArray[x].tokid[y].tokid_id + " " + items[i].fromkid_id);
 
                                       if (tempArray[x].tokid[y].tokid_id == items[i].fromkid_id) {
                                           tempArray[x].tokid[y].tokidreply = 'likes' //items[i].comment_content
-                                          //alert('updated kid response - ' + JSON.stringify(tempArray[x]));
 
                                           // @@@@ NEED TO SAVE LIKES INTO LOCAL IMAGEPROPERTIES ARRAY.  
                                           // Check to see if this Like (ImageID, UserID) is in the quick check array.  IF NOT, then add to local imagepropertiesarray
                                           // ------------------
-                                          //alert(imageID + items[i].fromkid_id)
-                                          //alert(likesArrayFlattened.indexOf(imageID + items[i].fromkid_id))
                                           if (likesArrayFlattened.indexOf(imageID + items[i].fromkid_id) == -1) {  // Not found in array
-                                              //alert("adding new like");
                                               // Make new JSON element with the Like event details
                                               var event = items[i].event_type;
                                               var name = items[i].fromkid_name;
@@ -469,8 +296,6 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
 
                       if ((imageurlfound == false) && (event_type == 'sharepicture')) {  // New SharedUrl found 
 
-                          //alert('found unknow imageurl and share event')
-
                           // @@@@ Make new array object for UI 
                           // ==============================
                           var element = {  // @@@ Make a new array object.  If items[i] is NULL, the HTML binding for ng-show will hide the HTML templating
@@ -491,7 +316,6 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
                               time: time,
                           };
                           tempArray.push(element); // add into array for UI & $scope
-                          //alert('updated with new imageurl share event - ' + JSON.stringify(tempArray));
                       };
 
                       }; //end if event type
@@ -501,9 +325,7 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
 
                   // @@@ Push the cleaned up array of objects into the $scope
                   globalService.eventArray = tempArray.reverse();// Reverse order of array so most recent is first
-                  //globalService.eventArray = tempArray;
                   $scope.eventarray = globalService.eventArray;
-                  //alert("Event array - "+JSON.stringify($scope.eventarray))
 
               }; // end if
 
@@ -536,6 +358,7 @@ cordovaNG.controller('clientstartController', function ($scope, globalService, A
 
 
     // Click on image in timeline
+    // ------------------------------------------------
     $scope.gotoPictureView = function (clickEvent) {
         $scope.clickEvent = globalService.simpleKeys(clickEvent);
         $scope.idParameters = clickEvent.target.id;  // div ID has 3 values shoved in it

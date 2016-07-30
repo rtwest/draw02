@@ -4,13 +4,54 @@
 
 <div>header goes here</div>
 
-<div>Shen you add family here, they will be friends and able to share with each other from the start</div>
-
 <button type="button" class="btn btn-primary" style="box-shadow:none;" ng-click="showaddclientui=true;randomAvatarID();">Add</button>
 <button type="button" class="btn btn-primary" style="box-shadow:none;" ng-click="gotoInvitationView()">Invitations</button>
 <button type="button" class="btn btn-primary" style="box-shadow:none;" ng-click="gotoCanvasView()">Draw</button>
+<button type="button" class="btn btn-primary" style="box-shadow:none;" ng-click="gotoGalleryView()">Gallery</button>
+
+Tabs for My Activity and My Clients
+
+<!--Event Log  Repeater. THIS CODE USED IN CLIENTSTART.HTML and  CLIENTPROPERTIES.HTML -->
+<div>
+    <!--'For Each' loop using object 'clientlist' known to the $scope when defined in the controller -->
+    <!--'row' is a new local var created here then used in controllerJS-->
+    <!-- Can use 'arr.[x]' for array and 'ParamName/Colname' if JSON -->
+    <div ng-repeat="row in eventarray track by $index" ng-include="'repeaterTemplate_2.html'"></div>
+    <div ng-show="noEventsFlag">No events</div>
+</div>
+<!-- This is one way to specify the repeater item template used above
+    Could also be in separate HTML file loaded with ng-include="'folder/repeaterTemplate.html'"
+    Have to have the element ID on everything because the obj id is passed where ever you click-->
+<script type="text/ng-template" id="repeaterTemplate_2.html">
+    <div>
+        <!--If row.day is not Null, then show it-->
+        <div ng-show="row.day"><strong> day is {{row.day}}</strong></div>
+        <div>
+            <!--{{row.datetime | date:"EEEE, MMM d"}}-->
+            {{row.time}}
+        </div>
+        <div>{{row.fromkid}}</div>
+        <div>{{row.fromkidavatar}}</div>
+        <div>{{row.event_type}}</div>
+
+        <!--Nested repeater within the first JSON array-->
+        <div ng-repeat="subarrayitem in row.tokid">
+            <div style="color:red">{{subarrayitem.tokidname}}</div>
+            <div>{{subarrayitem.tokidavatar}}</div>
+            <div>{{subarrayitem.tokidreply}}</div>
+        </div>
+
+        <div ng-show="row.picture_url">
+            <img id="{{row.picture_url}},{{row.fromkid}},{{row.fromkidavatar}},{{row.fromkid_id}}" class="smallimage" src="{{row.picture_url}}" alt="Shared drawing" ng-click="gotoPictureView($event)" />
+        </div>
+
+    </div>
+</script>
 
 
+
+
+<!-- ------------------------------------------------------------------------------------------------  -->
 
 <!--Client List Repeater-->
 <div>

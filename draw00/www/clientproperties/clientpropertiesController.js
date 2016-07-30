@@ -72,16 +72,10 @@ cordovaNG.controller('clientpropertiesController', function ($scope, globalServi
                       var today = new Date(); // today for comparison
                       var day, time, fromkid, tokid, lastimageurl;
                       thiseventday = new Date();
-                      //lasteventday = new Date();
                       nexteventday = new Date();
                       montharray = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-                      // @@@ ON THE ADMIN SIDE, DO YOU REVERSE ITEMS BEFORE BUILDING THEM?
-                      //items = items.reverse()  // @@@ This puts them in newwest first order.  
-
                       for (i = 0; i < len; i++) {
-
-                          //lasteventday = thiseventday; // when i=0, this is useless and skipped over with coniditional below
                           thiseventday = new Date(items[i].datetime); // convert datetime to number
                           if ((i + 1) < len) { //  Don't go over array length
                               nexteventday = new Date(items[i + 1].datetime);
@@ -89,15 +83,10 @@ cordovaNG.controller('clientpropertiesController', function ($scope, globalServi
 
                           // @@@ Get Day - Compare Day and Month
                           // ---------------------
-                          //if (i > 0) { // If this is NOT first in array, check if you need to show it.
                           if (i < (len-1)) { // If this is NOT last in array, check if you need to show it.
-                              //if ((thiseventday.getDate() == lasteventday.getDate()) && (thiseventday.getMonth() == lasteventday.getMonth())) {
-                              //    day = null; // then it's the same as the last one and don't need to repeat the date
-                              //}
                               if ((thiseventday.getDate() == nexteventday.getDate()) && (thiseventday.getMonth() == nexteventday.getMonth())) {
                                   day = null; // then it's the same as the last one and don't need to repeat the date
                               }
-                                  // may never have this case?
                               else if ((thiseventday.getDate() == today.getDate()) && (thiseventday.getMonth() == today.getMonth())) {
                                   day = 'Today';
                               }
@@ -182,7 +171,6 @@ cordovaNG.controller('clientpropertiesController', function ($scope, globalServi
 
                                   if (tempArray[x].picture_url == items[i].picture_url) {
 
-                                      alert('found imageurl')
                                       // Inspect to know how to add to Object
                                       // ------------
                                       // cases: SharePicture - track this url.  Like Picture - append to tracked url.  
@@ -197,7 +185,6 @@ cordovaNG.controller('clientpropertiesController', function ($scope, globalServi
                                               tokidreply: '', //null in this case
                                           };
                                           tempArray[x].tokid.push(kidobject);
-                                          alert('new kid shared with - ' + JSON.stringify(tempArray[x]));
                                       }
 
                                           // url, liked, from any kid
@@ -209,7 +196,6 @@ cordovaNG.controller('clientpropertiesController', function ($scope, globalServi
                                           for (y = 0; y < kidArrayLength; y++) { // Loop through to subarray for tokid_id
                                               if (tempArray[x].tokid[y].tokid_id == items[i].fromkid_id) {
                                                   tempArray[x].tokid[y].tokidreply = 'likes' //items[i].comment_content
-                                                  alert('updated kid response - ' + JSON.stringify(tempArray[x]));
                                                   break;
                                               };
                                           }; // end for
@@ -223,8 +209,6 @@ cordovaNG.controller('clientpropertiesController', function ($scope, globalServi
                               }; //end for
 
                               if ((imageurlfound == false) && (event_type == 'sharepicture')) {  // New SharedUrl found 
-
-                                  alert('found unknow imageurl and share event')
 
                                   // @@@@ Make new array object for UI 
                                   // ==============================
@@ -246,13 +230,9 @@ cordovaNG.controller('clientpropertiesController', function ($scope, globalServi
                                       time: time,
                                   };
                                   tempArray.push(element); // add into array for UI & $scope
-                                  alert('updated with new imageurl share event - ' + JSON.stringify(tempArray));
                               };
 
                           }; //end if event type
-
-
-
 
                       }; //end for
 
@@ -300,8 +280,6 @@ cordovaNG.controller('clientpropertiesController', function ($scope, globalServi
             else { // if friend records found, add to friendsarray  // @@@@@@ MAYBE 'PUSH' INTO ARRAY FOR MULTIPLE CLIENTS TO AVOID LOTS OF AZURE CALLS
 
                 $scope.friendArray = []  // @@@ Make a brand New Array (( Dumping any existing one ))
-
-                //alert(JSON.stringify(items));
 
                 // Go through Friend items and reorder it 
                 // --------------------------------------
