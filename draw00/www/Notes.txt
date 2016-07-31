@@ -1,15 +1,17 @@
 W O R K I N G   R I G H T   N O W
 -----------------------------
 
+- UI
+	- need loaders
+	- need place in UI for success messages
+	- need action sheets
+	- need navigation buttons
+
 - ** PROBLEM: Push notification not received on iOS.  iOS sends through Node.js fine.  APN not sending to device.  Problem with Certificates?
 
-- ** PROBLEM: Admin side doesn't have it's own event log to see when someone shared with you.
-
-
+TEST CASES
 - Collapsing repeat share event events, when looking at a client sharing to several people at once	- /// @@@@@@  HAVE TO BE SIGNED IN AS ADMIN TO TEST THIS OUT.
 - On Invitation Accept, Insert into Event Record  /// @@@@@@  HAVE TO BE SIGNED IN AS ADMIN TO TEST THIS OUT.  Alternatively, do this from Admin side after invitation accept
-- ** PROBLEM: GalleryView - weird thing when Canceling Share, then Deleting picture - this deletes the previous picture not one selected.  Will be less likely for this case when UI is better.
-
 
 
 
@@ -17,6 +19,8 @@ W O R K I N G   R I G H T   N O W
 -----------------------------
 - XX - RESEARCH - WHY THE FAIL ON CONNECTING TO AZURE SOMETIMES?
 - XX - RESEARCH - ALSO NEED TO CLEAN BLOB STORAGE WEEKLY.  Maybe have to convert mobile services to app services.  Get scheduler.  Web Pages.  New Pricing?? 
+
+- PROBLEM: GalleryView - weird thing when Canceling Share, then Deleting picture - this deletes the previous picture not one selected.  Will be less likely for this case when UI is better.
 - * Loaders and Progress indicators when awaiting on Azure response
 - * Need better Picture Save Indicator.  Need better Picuture Shared indicator
 - Need to check for web connection on load and alert

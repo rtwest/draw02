@@ -46,7 +46,7 @@ cordovaNG.controller('clientpropertiesController', function ($scope, globalServi
 
 
     // ==========================================
-    //  Get the Event log based on Client GUID.   THIS CODE USED ON CLIENTPROPERTIESCONTROLLER.JS and CLIENTSTARTCONTROLLER.JS
+    //  Get the Event log based on Client GUID.   THIS CODE USED ON CLIENTPROPERTIESCONTROLLER.JS and CLIENTSTARTCONTROLLER.JS and ADMINDASHCONTROLLER.JS
     // ==========================================
 
     //function getEventLog() {
@@ -57,8 +57,6 @@ cordovaNG.controller('clientpropertiesController', function ($scope, globalServi
         Azureservice.read('events', "$filter=fromkid_id eq '" + selectedclientguid + "' or tokid_id eq '" + selectedclientguid + "'")
               .then(function (items) {
 
-                  //alert(JSON.stringify(items));
-
                   if (items.length == 0) { // if no Event record found, then
                       $scope.noEventsFlag = true;   // '...Flag' is a flag the UI uses to check for 'show/hide' msg div
                       console.log('no events in last 2 weeks')
@@ -68,7 +66,6 @@ cordovaNG.controller('clientpropertiesController', function ($scope, globalServi
                       // --------------------------------------
                       var tempArray = [];
                       var len = items.length;
-                      alert(len)
                       var today = new Date(); // today for comparison
                       var day, time, fromkid, tokid, lastimageurl;
                       thiseventday = new Date();
@@ -239,7 +236,6 @@ cordovaNG.controller('clientpropertiesController', function ($scope, globalServi
                       //@@@@@@@@@@@@@@@@@@@@@@@
                       $scope.eventarray = tempArray.reverse(); // For some reason, this was reversing the order of the list chronologically
                       //$scope.eventarray = tempArray;
-                      //alert(JSON.stringify($scope.eventarray))
 
                   }; // end if
 
@@ -422,6 +418,8 @@ cordovaNG.controller('clientpropertiesController', function ($scope, globalServi
 
 
 
+    // ################################################################################################
+    // ################################################################################################
 
     // ==========================================
     //  Create New Friend request record on Azure.  Store locally and create on Azure
@@ -432,8 +430,6 @@ cordovaNG.controller('clientpropertiesController', function ($scope, globalServi
     //4. create new invitation record with the 4 corresponding IDs
     // INVITATION RECORD: fromparent_id, toparent_id, fromkid, tokid, datetime
 
-
-    // #########################################################################################################################################################
     var ToParentID, ToParentName, ToKidName2, FromKidName, FromKidID, ToKidID,ToKidAvatar,FromKidAvatar;
     var clientarray2 = [];
 

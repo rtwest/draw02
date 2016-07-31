@@ -18,21 +18,24 @@ cordovaNG.controller('pictureviewController', function ($scope, globalService, A
     // trim down URL to just the image file name
     var pictureID = $scope.pictureurl.replace('https://rtwdevstorage.blob.core.windows.net/imagecontainer/','');
     pictureID = pictureID.replace('.png','');
-    alert(pictureID);
+    //alert(pictureID);
 
 
-    // Check LikeHistory to see if you've Liked this before and if Like button should be shown
+    // Check LikeHistory to see if you've Liked this before and if Like button should be shown.  
+    // Note: if this is Admin looking at Client's timeline, they can't Like drawing here.  Look for LastView = ClientProperties to know.
     //---------------
-    var likeHistoryArray = [];
-    if (localStorage.getItem('RYB_likehistoryarray')) { // if exists
-        likeHistoryArray = JSON.parse(localStorage.getItem('RYB_likehistoryarray')); // get array from localstorage key pair and string
-        alert(JSON.stringify(likeHistoryArray));
-        if (likeHistoryArray.indexOf(pictureID) == -1) {
+    if (globalService.lastView != '/clientproperties'){ // if you didn't come from ClientProperties, then you're not an Admin
+        var likeHistoryArray = [];
+        if (localStorage.getItem('RYB_likehistoryarray')) { // if Like history exists
+            likeHistoryArray = JSON.parse(localStorage.getItem('RYB_likehistoryarray')); // get array from localstorage key pair and string
+            //alert(JSON.stringify(likeHistoryArray));
+            if (likeHistoryArray.indexOf(pictureID) == -1) {
+                $scope.showLikeButton = true;
+            };
+        }
+        else {
             $scope.showLikeButton = true;
         };
-    }
-    else {
-        $scope.showLikeButton = true;
     };
 
 
